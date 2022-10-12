@@ -5,7 +5,7 @@ public class Pinky : Ghost
     public Pinky() : base(325, 315, 50, 50)
     {
         speed = 2;
-        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\pinky.png");
+        image = baseImage = Image.FromFile(@"pictures\pinky.png");
         left = new[] { "pinky_Left (2)", "pinky_Left (1)" };
         right = new[] { "pinky_Right (2)", "pinky_Right (1)" };
         up = new[] { "pinky_Up (2)", "pinky_Up (1)" };

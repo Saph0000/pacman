@@ -18,33 +18,7 @@ public abstract class GameObject
         this.height = height;
     }
 
-    /*
-    public bool HitObject(GameObject gameObject, GameObject testObject)
-    {
-        var hitbox = new HitBox(testObject, 5);
-        return hitbox.xPosition < gameObject.xPosition + gameObject.width &&
-               !(hitbox.xPosition < gameObject.xPosition) &&
-               hitbox.yPosition < gameObject.yPosition + gameObject.height &&
-               hitbox.yPosition + hitbox.height > gameObject.yPosition ||
-               
-                hitbox.xPosition + width > gameObject.xPosition &&
-                !(hitbox.xPosition > gameObject.xPosition) &&
-                hitbox.yPosition < gameObject.yPosition + gameObject.height &&
-                hitbox.yPosition + hitbox.height > gameObject.yPosition ||
-               
-               hitbox.yPosition < gameObject.yPosition + gameObject.height &&
-               !(hitbox.yPosition < gameObject.yPosition) &&
-               hitbox.xPosition < gameObject.xPosition + gameObject.width && 
-               hitbox.xPosition + hitbox.width > gameObject.xPosition ||
-        
-               hitbox.yPosition + hitbox.height > gameObject.yPosition &&
-               !(hitbox.yPosition > gameObject.yPosition) &&
-               hitbox.xPosition < gameObject.xPosition + gameObject.width && 
-               hitbox.xPosition + hitbox.width > gameObject.xPosition;
-    }
-    */
-    
-    public bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus = 0, int yPlus = 0) =>
+    protected bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus = 0, int yPlus = 0) =>
         viewAngle switch
         {
             ViewAngle.Left => WouldOverlap(gameObject, -1, 0, xPlus, yPlus),
@@ -54,7 +28,7 @@ public abstract class GameObject
             _ => true
         };
 
-    public bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, int xPlus = 0, int yPlus = 0)
+    protected bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, int xPlus = 0, int yPlus = 0)
     {
         var leftX = Math.Max(xPosition + xPlus + xDelta, gameObject.xPosition);
         var rightX = Math.Min(xPosition + xPlus + xDelta + width, gameObject.xPosition + gameObject.width);

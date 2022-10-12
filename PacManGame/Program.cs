@@ -1,11 +1,11 @@
 namespace PacManGame;
 
-static class Program
+public static class Program
 {
     [STAThread]
-    static void Main()
+    public static void Main()
     {
-        //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnError);
+        AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnError);
         ApplicationConfiguration.Initialize();
         Application.Run(new Form1());
     }
