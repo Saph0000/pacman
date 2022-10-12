@@ -12,6 +12,12 @@
       <None Update="Levels\Walls.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Levels\PacDots.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Levels\PowerPallets.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

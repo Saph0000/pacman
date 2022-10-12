@@ -21,7 +21,7 @@ public class Pacman : GameActor
         foreach (var dot in LevelFactory.PacDots)
         {
             
-            if (viewangle != ViewAngle.None && HitObject(dot, this))
+            if (viewangle != ViewAngle.None && WouldOverlap(dot))
             {
                 LevelFactory.PacDots.Remove(dot);
                 player.Score += 10;
@@ -36,11 +36,10 @@ public class Pacman : GameActor
         foreach (var powerPallet in LevelFactory.PowerPallets)
         {
             
-            if (viewangle != ViewAngle.None && HitObject(powerPallet, this))
+            if (viewangle != ViewAngle.None && WouldOverlap(powerPallet))
             {
                 LevelFactory.PowerPallets.Remove(powerPallet);
                 player.Score += 50;
-                //Frightend();
                 break;
             }
         }

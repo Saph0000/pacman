@@ -149,45 +149,7 @@ public abstract class GameActor : GameObject
         }
         return false;
     }
-    
-    public bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle) =>
-        viewAngle switch
-        {
-            ViewAngle.Left => WouldOverlap(gameObject, -1, 0),
-            ViewAngle.Right => WouldOverlap( gameObject, 1, 0),
-            ViewAngle.Up => WouldOverlap(gameObject, 0, -1),
-            ViewAngle.Down => WouldOverlap(gameObject, 0, 1),
-            _ => true
-        };
-    
-    public bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus, int yPlus) =>
-        viewAngle switch
-        {
-            ViewAngle.Left => WouldOverlap(gameObject, -1, 0, xPlus, yPlus),
-            ViewAngle.Right => WouldOverlap( gameObject, 1, 0, xPlus, yPlus),
-            ViewAngle.Up => WouldOverlap(gameObject, 0, -1, xPlus, yPlus),
-            ViewAngle.Down => WouldOverlap(gameObject, 0, 1, xPlus, yPlus),
-            _ => true
-        };
 
-    private bool WouldOverlap(GameObject gameObject, int xDelta, int yDelta)
-    {
-        var leftX = Math.Max(xPosition + xDelta, gameObject.xPosition);
-        var rightX = Math.Min(xPosition + xDelta + width, gameObject.xPosition + gameObject.width);
-        var topY= Math.Max(yPosition + yDelta, gameObject.yPosition);
-        var bottomY = Math.Min(yPosition + yDelta + height, gameObject.yPosition + gameObject.height);
-        return leftX < rightX && topY < bottomY;
-    }
-    
-    private bool WouldOverlap(GameObject gameObject, int xDelta, int yDelta, int xPlus, int yPlus)
-    {
-        var leftX = Math.Max(xPosition + xPlus + xDelta, gameObject.xPosition);
-        var rightX = Math.Min(xPosition + xPlus + xDelta + width, gameObject.xPosition + gameObject.width);
-        var topY= Math.Max(yPosition + yPlus + yDelta, gameObject.yPosition);
-        var bottomY = Math.Min(yPosition + yPlus + yDelta + height, gameObject.yPosition + gameObject.height);
-        return leftX < rightX && topY < bottomY;
-    }
-    
     public List<ViewAngle> CheckDirection(ViewAngle currentviewAngle)
     {
         var possibleDirections = new List<ViewAngle>();

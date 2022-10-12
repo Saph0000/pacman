@@ -62,14 +62,18 @@ public partial class Form1 : Form
         pacman.CollectPowerPallets();
         
         frame++;
-        if (frame == 10)
+        if (frame == 5 || frame == 10)
         {
             pacman.DrawActor(3);
-            
+        }
+
+        if (frame == 10)
+        {
             foreach (var ghost in ghosts)
                 ghost.DrawActor(2);
             frame = 0;
         }
+        
 
         Invalidate();
     }
@@ -79,7 +83,6 @@ public partial class Form1 : Form
         foreach (var pacDot in pacDots)
             pacDot.Draw(e);
         e.Graphics.DrawString(pacman.player.Score.ToString(), Font, Brushes.Chartreuse, 10,10 );
-        
         foreach (var wall in walls)
             wall.Draw(e);
         foreach (var powerPallet in powerPallets)
