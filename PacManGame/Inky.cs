@@ -6,7 +6,7 @@ public class Inky : Ghost
     public Inky() : base(325, 315, 50, 50)
     {
         speed = 2;
-        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\blinky.png");
+        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\blinky.png");
         left = new string[] { "inky_Left (2)", "inky_Left (1)" };
         right = new string[] { "inky_Right (2)", "inky_Right (1)" };
         up = new string[] { "inky_Up (2)", "inky_Up (1)" };

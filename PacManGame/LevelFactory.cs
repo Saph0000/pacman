@@ -10,8 +10,19 @@ public static class LevelFactory
             .Select(split => new Wall(split[0], split[1], split[2], split[3]))
             .ToList();
     public static List<PacDot> PacDots => pacDots;
+    public static List<PowerPallets> PowerPallets => powerPallets;
 
-    
+    private static List<PowerPallets> powerPallets = new()
+    {
+        new PowerPallets(20, 138, 30, 30),
+        new PowerPallets(645, 138, 30, 30),
+        new PowerPallets(645, 625, 30, 30),
+        new PowerPallets(20, 625, 30, 30),
+
+    };
+
+
+
     private static List<PacDot> pacDots = new()
     {
         new PacDot(30, 110, 10, 10),

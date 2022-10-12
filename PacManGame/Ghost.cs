@@ -20,7 +20,7 @@ public class Ghost : GameActor
         var rightDistance = double.PositiveInfinity;
         var leftDistance = double.PositiveInfinity;
         
-        foreach (var viewAngle in checkDirection(viewangle))
+        foreach (var viewAngle in CheckDirection(viewangle))
         {
             switch (viewAngle)
             {
@@ -69,4 +69,16 @@ public class Ghost : GameActor
 
     private static double Min(params double[] values) => 
         values.Min();
+    
+    public void Frightend()
+    {
+        //viewangle = viewangle.GetOppositeDirection();
+        var random = new Random();
+        var possibleDirections = CheckDirection(viewangle);
+        viewangle = possibleDirections[random.Next(0, possibleDirections.Count - 1)];
+        CouldTurn(viewangle, nextViewangle);
+        if(!WouldHitWall(viewangle))
+            Move();
+
+    }
 }

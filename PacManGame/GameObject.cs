@@ -6,6 +6,7 @@ public abstract class GameObject
     public int yPosition;
     public int width;
     public int height;
+    public int totalPacDots = 240;
     
     
     

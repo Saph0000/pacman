@@ -23,6 +23,7 @@ public partial class Form1 : Form
     
     private List<Wall> walls = LevelFactory.Walls;
     private List<PacDot> pacDots = LevelFactory.PacDots;
+    private List<PowerPallets> powerPallets = LevelFactory.PowerPallets;
     private int frame = 0;
 
     public Form1()
@@ -56,12 +57,13 @@ public partial class Form1 : Form
         inky.SetToNextTurn();
         pinky.SetToNextTurn();
         clyde.SetToNextTurn();
-        blinky.Chase(pacman);
-        inky.Chase(pacman, blinky);
-        pinky.Chase(pacman);
-        clyde.Chase(pacman);
+        blinky.Frightend();
+        inky.Frightend();
+        pinky.Frightend();
+        clyde.Frightend();
         
         pacman.CollectDots();
+        pacman.CollectPowerPallets();
         
         /*if (pacman.HitObject(blinky, pacman) || (pacman.HitObject(inky, pacman)))
         {
@@ -100,6 +102,8 @@ public partial class Form1 : Form
         
         foreach (var wall in walls)
             wall.MakeWall(e);
+        foreach (var powerPallet in powerPallets)
+            powerPallet.MakeWall(e);
         e.Graphics.DrawImage(blinky.image, blinky.xPosition, blinky.yPosition, blinky.width, blinky.height);
         e.Graphics.DrawImage(inky.image, inky.xPosition, inky.yPosition, inky.width, inky.height);
         e.Graphics.DrawImage(pinky.image, pinky.xPosition, pinky.yPosition, pinky.width, pinky.height);

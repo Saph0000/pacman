@@ -34,16 +34,16 @@ public abstract class GameActor : GameObject
                 image = baseImage;
                 break;
             case ViewAngle.Right:
-                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\" + right[currFrame] +".png");
+                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\" + right[currFrame] +".png");
                 break;
             case ViewAngle.Left:
-                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\" + left[currFrame] +".png");
+                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\" + left[currFrame] +".png");
                 break;
             case ViewAngle.Up:
-                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\" + up[currFrame] +".png");
+                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\" + up[currFrame] +".png");
                 break;
             case ViewAngle.Down:
-                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\" + down[currFrame] +".png");
+                image = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\" + down[currFrame] +".png");
                 break;
         }
         
@@ -132,18 +132,6 @@ public abstract class GameActor : GameObject
     
     public bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall) =>
         WouldHitWall(viewAngle, out hitWall, 0, 0);
-    /*{
-        hitWall = null;
-        foreach (var wall in LevelFactory.Walls)
-        {
-            if (WouldHitObject(wall, viewAngle))
-            {
-                hitWall = wall;
-                return true;
-            }
-        }
-        return false;
-    }*/
     
     public bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall, int xPlus, int yPlus)
     {
@@ -197,7 +185,7 @@ public abstract class GameActor : GameObject
         return leftX < rightX && topY < bottomY;
     }
     
-    public List<ViewAngle> checkDirection(ViewAngle currentviewAngle)
+    public List<ViewAngle> CheckDirection(ViewAngle currentviewAngle)
     {
         var possibleDirections = new List<ViewAngle>();
         if (!WouldHitWall(ViewAngle.Up) && currentviewAngle != ViewAngle.Down)

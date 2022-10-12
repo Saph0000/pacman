@@ -5,7 +5,7 @@ public class Clyde : Ghost
     public Clyde() : base(325, 315, 50, 50)
     {
         speed = 2;
-        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\clyde.png");
+        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\clyde.png");
         left = new string[] { "clyde_Left (2)", "clyde_Left (1)" };
         right = new string[] { "clyde_Right (2)", "clyde_Right (1)" };
         up = new string[] { "clyde_Up (2)", "clyde_Up (1)" };

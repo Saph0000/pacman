@@ -12,7 +12,7 @@ public class Pacman : GameActor
     public Pacman() : base(330, 465, 50, 50)
     {
         speed = 7;
-        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\PacManGame\PacManGame\pictures\pacman.png");
+        image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\pacman.png");
         left = new string[] { "pacman", "pacman_Left (1)", "pacman_Left (2)" };
         right = new string[] { "pacman", "pacman_Right (1)", "pacman_Right (2)" };
         up = new string[] { "pacman", "pacman_Up (1)", "pacman_Up (2)" };
@@ -28,6 +28,22 @@ public class Pacman : GameActor
             {
                 LevelFactory.PacDots.Remove(dot);
                 player.Score += 10;
+                totalPacDots--;
+                break;
+            }
+        }
+    }
+
+    public void CollectPowerPallets()
+    {
+        foreach (var powerPallet in LevelFactory.PowerPallets)
+        {
+            
+            if (viewangle != ViewAngle.None && HitObject(powerPallet, this))
+            {
+                LevelFactory.PowerPallets.Remove(powerPallet);
+                player.Score += 50;
+                //Frightend();
                 break;
             }
         }

@@ -6,5 +6,5 @@ public enum ViewAngle
     Right,
     Left,
     Up,
-    Down,
+    Down
 }
