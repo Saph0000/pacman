@@ -6,7 +6,7 @@ public class PacDot : GameObject
     {
     }
 
-    public void MakeDot(PaintEventArgs e)
+    public override void Draw(PaintEventArgs e)
     {
         e.Graphics.FillEllipse(Brushes.Yellow, xPosition, yPosition, width, height);
     }

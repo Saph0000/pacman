@@ -2,21 +2,10 @@
 
 public class Player
 {
-    private int life;
-    private long score;
     private int points;
 
 
-  public int Life
-  {
-      get => life;
-      set => life = value;
-  }
+  public int Life { get; set; }
 
-  public long Score
-  {
-      get => score;
-      set => score = value;
-  }
-  
+  public long Score { get; set; }
 }

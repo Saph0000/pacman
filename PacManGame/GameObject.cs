@@ -8,8 +8,6 @@ public abstract class GameObject
     public int height;
     public int totalPacDots = 240;
     
-    
-    
     public Player player = new Player();
 
     protected GameObject(int xPosition, int yPosition, int width, int height)
@@ -22,25 +20,27 @@ public abstract class GameObject
 
     public bool HitObject(GameObject gameObject, GameObject testObject)
     {
-        HitBox hitbox = new HitBox(testObject, 5);
+        var hitbox = new HitBox(testObject, 5);
         return hitbox.xPosition < gameObject.xPosition + gameObject.width &&
                !(hitbox.xPosition < gameObject.xPosition) &&
-                (hitbox.yPosition < gameObject.yPosition + gameObject.height &&
-                hitbox.yPosition + hitbox.height > gameObject.yPosition) ||
+               hitbox.yPosition < gameObject.yPosition + gameObject.height &&
+               hitbox.yPosition + hitbox.height > gameObject.yPosition ||
                
                 hitbox.xPosition + width > gameObject.xPosition &&
                 !(hitbox.xPosition > gameObject.xPosition) &&
-                (hitbox.yPosition < gameObject.yPosition + gameObject.height &&
-                hitbox.yPosition + hitbox.height > gameObject.yPosition) ||
+                hitbox.yPosition < gameObject.yPosition + gameObject.height &&
+                hitbox.yPosition + hitbox.height > gameObject.yPosition ||
                
-               (hitbox.yPosition < gameObject.yPosition + gameObject.height) &&
+               hitbox.yPosition < gameObject.yPosition + gameObject.height &&
                !(hitbox.yPosition < gameObject.yPosition) &&
-               (hitbox.xPosition < gameObject.xPosition + gameObject.width && 
-                hitbox.xPosition + hitbox.width > gameObject.xPosition) ||
+               hitbox.xPosition < gameObject.xPosition + gameObject.width && 
+               hitbox.xPosition + hitbox.width > gameObject.xPosition ||
         
-               (hitbox.yPosition + hitbox.height > gameObject.yPosition) &&
+               hitbox.yPosition + hitbox.height > gameObject.yPosition &&
                !(hitbox.yPosition > gameObject.yPosition) &&
-               (hitbox.xPosition < gameObject.xPosition + gameObject.width && 
-                hitbox.xPosition + hitbox.width > gameObject.xPosition);
+               hitbox.xPosition < gameObject.xPosition + gameObject.width && 
+               hitbox.xPosition + hitbox.width > gameObject.xPosition;
     }
+
+    public abstract void Draw(PaintEventArgs paintEventArgs);
 }

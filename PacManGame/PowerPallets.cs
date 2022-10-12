@@ -8,7 +8,7 @@ public class PowerPallets : GameObject
     {
     }
     
-    public void MakeWall(PaintEventArgs e)
+    public override void Draw(PaintEventArgs e)
     {
         e.Graphics.FillEllipse(Color, xPosition, yPosition, this.width, this.height);
     }

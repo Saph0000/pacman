@@ -1,4 +1,4 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.Ghosts;
 
 public class Blinky : Ghost
 {
@@ -13,7 +13,6 @@ public class Blinky : Ghost
         down = new[]{ "blinky_Down (2)", "blinky_Down (1)"};
     }
 
-   
     public void Chase(Pacman pacman)
     {
         targetXPosition = pacman.xPosition;
@@ -28,7 +27,8 @@ public class Blinky : Ghost
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    
-    
-    
+    public override void Draw(PaintEventArgs e)
+    {
+        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
+    }
 }

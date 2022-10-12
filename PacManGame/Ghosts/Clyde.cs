@@ -1,4 +1,4 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.Ghosts;
 
 public class Clyde : Ghost
 {
@@ -38,5 +38,10 @@ public class Clyde : Ghost
     public void Frightend()
     {
         
+    }
+
+    public override void Draw(PaintEventArgs e)
+    {
+        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
     }
 }

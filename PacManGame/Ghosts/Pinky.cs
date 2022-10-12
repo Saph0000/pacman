@@ -1,4 +1,4 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.Ghosts;
 
 public class Pinky : Ghost
 {
@@ -6,10 +6,10 @@ public class Pinky : Ghost
     {
         speed = 2;
         image = baseImage = Image.FromFile(@"C:\Users\reutimann\RiderProjects\pacman\PacManGame\pictures\pinky.png");
-        left = new string[] { "pinky_Left (2)", "pinky_Left (1)" };
-        right = new string[] { "pinky_Right (2)", "pinky_Right (1)" };
-        up = new string[] { "pinky_Up (2)", "pinky_Up (1)" };
-        down = new string[]{ "pinky_Down (2)", "pinky_Down (1)"};
+        left = new[] { "pinky_Left (2)", "pinky_Left (1)" };
+        right = new[] { "pinky_Right (2)", "pinky_Right (1)" };
+        up = new[] { "pinky_Up (2)", "pinky_Up (1)" };
+        down = new[]{ "pinky_Down (2)", "pinky_Down (1)"};
     }
 
    
@@ -49,5 +49,10 @@ public class Pinky : Ghost
     public void Frightend()
     {
         
+    }
+
+    public override void Draw(PaintEventArgs e)
+    {
+        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
     }
 }

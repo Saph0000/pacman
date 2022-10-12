@@ -1,7 +1,8 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.Ghosts;
 
-public class Ghost : GameActor
+public abstract class Ghost : GameActor
 {
+    private static readonly Random random = new();
     public int targetXPosition;
     public int targetYPosition;
     protected Ghost(int xPosition, int yPosition, int width, int height) : base(xPosition, yPosition, width, height)
@@ -73,12 +74,11 @@ public class Ghost : GameActor
     public void Frightend()
     {
         //viewangle = viewangle.GetOppositeDirection();
-        var random = new Random();
+        //var random = new Random();
         var possibleDirections = CheckDirection(viewangle);
         viewangle = possibleDirections[random.Next(0, possibleDirections.Count - 1)];
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
-
     }
 }

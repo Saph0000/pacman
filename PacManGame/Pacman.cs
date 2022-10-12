@@ -6,9 +6,6 @@ public class Pacman : GameActor
 {
     private bool isDead;
 
-
-
-
     public Pacman() : base(330, 465, 50, 50)
     {
         speed = 7;
@@ -47,5 +44,10 @@ public class Pacman : GameActor
                 break;
             }
         }
+    }
+
+    public override void Draw(PaintEventArgs e)
+    {
+        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
     }
 }

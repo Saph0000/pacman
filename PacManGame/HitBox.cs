@@ -6,4 +6,8 @@ public class HitBox : GameObject
         gameObject.width - 2 * padding, gameObject.height - 2 * padding)
     {
     }
+
+    public override void Draw(PaintEventArgs paintEventArgs)
+    {
+    }
 }

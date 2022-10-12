@@ -8,7 +8,7 @@ public class Wall : GameObject
     {
     }
 
-    public void MakeWall(PaintEventArgs e)
+    public override void Draw(PaintEventArgs e)
     {
         e.Graphics.FillRectangle(Color, xPosition, yPosition, this.width, this.height);
     }

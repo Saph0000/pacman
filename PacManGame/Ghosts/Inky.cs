@@ -1,4 +1,6 @@
-﻿namespace PacManGame;
+﻿using PacManGame.Ghosts;
+
+namespace PacManGame;
 
 public class Inky : Ghost
 {
@@ -68,5 +70,10 @@ public class Inky : Ghost
     public void Frightend()
     {
         
+    }
+
+    public override void Draw(PaintEventArgs e)
+    {
+        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
     }
 }

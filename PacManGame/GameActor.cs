@@ -16,7 +16,8 @@ public abstract class GameActor : GameObject
     protected GameActor(int xPosition, int yPosition, int width, int height) : base(xPosition, yPosition, width, height)
     {
     }
-/*
+
+    /*
     public ViewAngle viewangle
     {
         get { return Viewangle; }
@@ -25,7 +26,9 @@ public abstract class GameActor : GameObject
             Viewangle = value;
             this.DrawActor(currFrame);
         }
-    }*/
+    }
+    */
+    
     public void DrawActor(int maxFrames)
     {
         switch (viewangle)
