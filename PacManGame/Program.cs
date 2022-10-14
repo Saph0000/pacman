@@ -7,7 +7,7 @@ public static class Program
     {
         AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnError);
         ApplicationConfiguration.Initialize();
-        Application.Run(new Form1());
+        Application.Run(new Window());
     }
 
     private static void OnError(object sender, UnhandledExceptionEventArgs e)

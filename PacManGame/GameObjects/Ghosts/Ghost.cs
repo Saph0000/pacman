@@ -1,4 +1,6 @@
-﻿namespace PacManGame.Ghosts;
+﻿using Timer = System.Windows.Forms.Timer;
+
+namespace PacManGame.GameObjects.Ghosts;
 
 public abstract class Ghost : GameActor
 {
@@ -71,14 +73,15 @@ public abstract class Ghost : GameActor
     private static double Min(params double[] values) => 
         values.Min();
     
-    public void Frightend()
+    public void Frightend(int timerBlue, int timerFlash)
     {
-        //viewangle = viewangle.GetOppositeDirection();
-        //var random = new Random();
+        speed /= 2;
         var possibleDirections = CheckDirection(viewangle);
         viewangle = possibleDirections[random.Next(0, possibleDirections.Count - 1)];
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
+        left = right = up = down = new[] { "ghost_Frightened (1)", "ghost_Frightened (2)" };
+        speed *= 2;
     }
 }

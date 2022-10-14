@@ -1,11 +1,11 @@
-﻿namespace PacManGame.Ghosts;
+﻿namespace PacManGame.GameObjects.Ghosts;
 
 public class Blinky : Ghost
 {
     
     public Blinky() : base(325, 315, 50, 50)
     {
-        speed = 2;
+        speed = 8;
         image = baseImage = Image.FromFile(@"pictures\blinky.png");
         left = new[] { "blinky_Left (2)", "blinky_Left (1)" };
         right = new[] { "blinky_Right (2)", "blinky_Right (1)" };

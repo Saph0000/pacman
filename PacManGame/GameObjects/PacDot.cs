@@ -1,4 +1,4 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.GameObjects;
 
 public class PacDot : GameObject
 {

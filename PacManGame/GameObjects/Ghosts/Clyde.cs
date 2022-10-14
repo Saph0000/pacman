@@ -1,10 +1,10 @@
-﻿namespace PacManGame.Ghosts;
+﻿namespace PacManGame.GameObjects.Ghosts;
 
 public class Clyde : Ghost
 {
     public Clyde() : base(325, 315, 50, 50)
     {
-        speed = 2;
+        speed = 5;
         image = baseImage = Image.FromFile(@"pictures\clyde.png");
         left = new[] { "clyde_Left (2)", "clyde_Left (1)" };
         right = new[] { "clyde_Right (2)", "clyde_Right (1)" };

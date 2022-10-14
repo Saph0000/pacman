@@ -1,13 +1,11 @@
-﻿using PacManGame.Ghosts;
-
-namespace PacManGame;
+﻿namespace PacManGame.GameObjects.Ghosts;
 
 public class Inky : Ghost
 {
    
     public Inky() : base(325, 315, 50, 50)
     {
-        speed = 2;
+        speed = 10;
         image = baseImage = Image.FromFile(@"pictures\blinky.png");
         left = new[] { "inky_Left (2)", "inky_Left (1)" };
         right = new[] { "inky_Right (2)", "inky_Right (1)" };

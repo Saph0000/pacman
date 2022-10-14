@@ -1,13 +1,14 @@
-using System.Text;
-using PacManGame.Ghosts;
-
-namespace PacManGame;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using PacManGame.GameObjects;
+using PacManGame.GameObjects.Ghosts;
+using Timer = System.Windows.Forms.Timer;
 
-public partial class Form1 : Form
+namespace PacManGame;
+
+public class Window : Form
 {
     private Pacman pacman = new();
     
@@ -16,7 +17,8 @@ public partial class Form1 : Form
         new Blinky(),
         new Inky(),
         new Pinky(),
-        new Clyde()
+        new Clyde(),
+        
     };
     
     
@@ -25,21 +27,23 @@ public partial class Form1 : Form
     private List<PowerPallets> powerPallets = LevelFactory.PowerPallets;
     private int frame = 0;
 
-    public Form1()
+    public Window()
     {
-        InitializeComponent();
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(800, 450);
         BackColor = Color.Black;
         DoubleBuffered = true;
         MaximizeBox = false;
         FormBorderStyle = FormBorderStyle.FixedDialog;
-        this.Size = new Size(Settings.ScreenWidth, Settings.ScreenHeight);
-        this.CenterToScreen();
-        this.KeyDown += HandleInput;
+        Size = new Size(Settings.ScreenWidth, Settings.ScreenHeight);
+        CenterToScreen();
+        KeyDown += HandleInput;
         Timer timer = new Timer();
-        timer.Interval = 10;
+        timer.Interval = 8;
         timer.Tick += TimerTick;
-        timer.Enabled = true;
+        timer.Enabled = true;;
     }
+
     private void TimerTick(object sender, EventArgs e)
     {
         pacman.CouldTurn(pacman.viewangle, pacman.nextViewangle);
@@ -55,14 +59,14 @@ public partial class Form1 : Form
         foreach (var ghost in ghosts)
         {
             ghost.SetToNextTurn();
-            ghost.Frightend();
+            ghost.Frightend(4, 8);
         }
 
         pacman.CollectDots();
         pacman.CollectPowerPallets();
         
         frame++;
-        if (frame == 5 || frame == 10)
+        if (frame is 5 or 10 )
         {
             pacman.DrawActor(3);
         }

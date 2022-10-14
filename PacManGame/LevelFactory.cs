@@ -1,4 +1,6 @@
-﻿namespace PacManGame;
+﻿using PacManGame.GameObjects;
+
+namespace PacManGame;
 
 public static class LevelFactory
 {

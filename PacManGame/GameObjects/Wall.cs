@@ -1,4 +1,4 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.GameObjects;
 
 public class Wall : GameObject
 {
@@ -8,6 +8,6 @@ public class Wall : GameObject
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.FillRectangle(Brushes.Blue, xPosition, yPosition, this.width, this.height);
+        e.Graphics.FillRectangle(Brushes.DarkBlue, xPosition, yPosition, this.width, this.height);
     }
 }

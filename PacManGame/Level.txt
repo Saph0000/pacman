@@ -1,0 +1,62 @@
+﻿namespace PacManGame;
+
+using System;
+using System.Windows.Forms;
+public class Level
+{
+        int sec = 0;
+        int scatterTimer = 7;
+        int chaseTimer = 20;
+        int scatterWaves;
+        private GhostMode currentMode;
+
+        public GhostMode CurrentMode
+        {
+            get => currentMode;
+            set
+            {
+                currentMode = CurrentMode;
+                //viewAngle turn around from all the ghosts
+            }
+        }
+        public Level(/*int pacmanSpeed, int ghostSpeed, int redGhostSpeed*/)
+    {
+     Timer levelTimer = new Timer();
+     levelTimer.Interval = 1000;
+     levelTimer.Tick += TimerTick;
+    }
+
+    private void TimerTick(object sender, EventArgs e)
+    {
+        if (sec < scatterTimer && scatterWaves != 4)
+        {
+            scatterWaves++;
+           // scatter();
+           currentMode = GhostMode.Scatter;
+        }
+        else
+        {
+            //chase();
+           currentMode = GhostMode.Chase;
+        }
+
+        if (scatterWaves == 2)
+        {
+            scatterTimer = 5;
+        }
+
+        if (sec == scatterTimer + chaseTimer)
+        {
+            sec = 0;
+        }
+
+        sec++;
+    }
+
+    private void frightend()
+    {
+        
+        Timer frightenedTimer = new();
+        frightenedTimer.Interval = 7000;
+    }
+}

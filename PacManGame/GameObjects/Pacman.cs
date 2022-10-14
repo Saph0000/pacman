@@ -1,6 +1,4 @@
-﻿using Timer = System.Windows.Forms.Timer;
-
-namespace PacManGame;
+﻿namespace PacManGame.GameObjects;
 
 public class Pacman : GameActor
 {

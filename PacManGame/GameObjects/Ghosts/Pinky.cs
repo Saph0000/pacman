@@ -1,10 +1,10 @@
-﻿namespace PacManGame.Ghosts;
+﻿namespace PacManGame.GameObjects.Ghosts;
 
 public class Pinky : Ghost
 {
     public Pinky() : base(325, 315, 50, 50)
     {
-        speed = 2;
+        speed = 10;
         image = baseImage = Image.FromFile(@"pictures\pinky.png");
         left = new[] { "pinky_Left (2)", "pinky_Left (1)" };
         right = new[] { "pinky_Right (2)", "pinky_Right (1)" };

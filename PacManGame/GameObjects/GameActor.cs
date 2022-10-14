@@ -1,4 +1,4 @@
-﻿namespace PacManGame;
+﻿namespace PacManGame.GameObjects;
 
 public abstract class GameActor : GameObject
 {
@@ -17,8 +17,8 @@ public abstract class GameActor : GameObject
     {
     }
 
-    /*
-    public ViewAngle viewangle
+    
+    public ViewAngle Viewangle
     {
         get { return Viewangle; }
         set
@@ -27,7 +27,7 @@ public abstract class GameActor : GameObject
             this.DrawActor(currFrame);
         }
     }
-    */
+    
     
     public void DrawActor(int maxFrames)
     {
