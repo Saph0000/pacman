@@ -3,7 +3,7 @@
 public class Inky : Ghost
 {
    
-    public Inky() : base(325, 315, 50, 50)
+    public Inky(IWorld world) : base(world,325, 315, 50, 50)
     {
         speed = 10;
         image = baseImage = Image.FromFile(@"pictures\blinky.png");
@@ -23,36 +23,36 @@ public class Inky : Ghost
         {
             case ViewAngle.Right:
             case ViewAngle.None:
-                pacmanXPosition = pacman.xPosition + 50;
-                pacmanYPosition = pacman.yPosition + 0;
+                pacmanXPosition = pacman.XPosition + 50;
+                pacmanYPosition = pacman.YPosition + 0;
                 break;
             case ViewAngle.Left:
-                pacmanXPosition = pacman.xPosition - 50;
-                pacmanYPosition = pacman.yPosition + 0;
+                pacmanXPosition = pacman.XPosition - 50;
+                pacmanYPosition = pacman.YPosition + 0;
                 break;
             case ViewAngle.Down:
-                pacmanXPosition = pacman.xPosition + 0;
-                pacmanYPosition = pacman.yPosition + 50;
+                pacmanXPosition = pacman.XPosition + 0;
+                pacmanYPosition = pacman.YPosition + 50;
                 break;
             case ViewAngle.Up:
-                pacmanXPosition = pacman.xPosition - 50;
-                pacmanYPosition = pacman.yPosition - 50;
+                pacmanXPosition = pacman.XPosition - 50;
+                pacmanYPosition = pacman.YPosition - 50;
                 break;
             default:
-                pacmanXPosition = pacman.xPosition;
-                pacmanYPosition = pacman.yPosition;
+                pacmanXPosition = pacman.XPosition;
+                pacmanYPosition = pacman.YPosition;
                 break;
         }
 
 
-        if (blinky.xPosition >= pacmanXPosition)
-            targetXPosition = pacmanXPosition -  (blinky.xPosition - pacmanXPosition);
-        if (blinky.yPosition >= pacmanYPosition)
-            targetYPosition = pacmanYPosition - (blinky.yPosition - pacmanYPosition);
-        if (blinky.xPosition <= pacmanXPosition)
-            targetXPosition = pacmanXPosition + (pacmanXPosition - blinky.xPosition);
-        if (blinky.yPosition <= pacmanYPosition)
-            targetYPosition = pacmanYPosition + (pacmanYPosition - blinky.yPosition);
+        if (blinky.XPosition >= pacmanXPosition)
+            targetXPosition = pacmanXPosition -  (blinky.XPosition - pacmanXPosition);
+        if (blinky.YPosition >= pacmanYPosition)
+            targetYPosition = pacmanYPosition - (blinky.YPosition - pacmanYPosition);
+        if (blinky.XPosition <= pacmanXPosition)
+            targetXPosition = pacmanXPosition + (pacmanXPosition - blinky.XPosition);
+        if (blinky.YPosition <= pacmanYPosition)
+            targetYPosition = pacmanYPosition + (pacmanYPosition - blinky.YPosition);
         
             
         GhostDecision(targetXPosition, targetYPosition);
@@ -72,6 +72,6 @@ public class Inky : Ghost
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
+        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
     }
 }

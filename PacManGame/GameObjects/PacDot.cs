@@ -2,13 +2,13 @@
 
 public class PacDot : GameObject
 {
-    public PacDot(int xPosition, int yPosition, int width, int height) : base(xPosition, yPosition, width, height)
+    public PacDot(IWorld world, int xPosition, int yPosition, int width, int height) : base(world, xPosition, yPosition, width, height)
     {
     }
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.FillEllipse(Brushes.Yellow, xPosition, yPosition, width, height);
+        e.Graphics.FillEllipse(Brushes.Yellow, XPosition, YPosition, Width, Height);
     }
 
     

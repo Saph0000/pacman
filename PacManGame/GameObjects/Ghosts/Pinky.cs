@@ -2,7 +2,7 @@
 
 public class Pinky : Ghost
 {
-    public Pinky() : base(325, 315, 50, 50)
+    public Pinky(IWorld world) : base(world,325, 315, 50, 50)
     {
         speed = 10;
         image = baseImage = Image.FromFile(@"pictures\pinky.png");
@@ -19,20 +19,20 @@ public class Pinky : Ghost
         {
             case ViewAngle.Right:
             case ViewAngle.None:
-                targetXPosition = pacman.xPosition + 100;
-                targetYPosition = pacman.yPosition;
+                targetXPosition = pacman.XPosition + 100;
+                targetYPosition = pacman.YPosition;
                 break;
             case ViewAngle.Left:
-                targetXPosition = pacman.xPosition - 100;
-                targetYPosition = pacman.yPosition;
+                targetXPosition = pacman.XPosition - 100;
+                targetYPosition = pacman.YPosition;
                 break;
             case ViewAngle.Down:
-                targetXPosition = pacman.xPosition;
-                targetYPosition = pacman.yPosition + 100;
+                targetXPosition = pacman.XPosition;
+                targetYPosition = pacman.YPosition + 100;
                 break;
             case ViewAngle.Up:
-                targetXPosition = pacman.xPosition - 100;
-                targetYPosition = pacman.yPosition - 100;
+                targetXPosition = pacman.XPosition - 100;
+                targetYPosition = pacman.YPosition - 100;
                 break;
         }
         
@@ -53,6 +53,6 @@ public class Pinky : Ghost
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
+        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
     }
 }

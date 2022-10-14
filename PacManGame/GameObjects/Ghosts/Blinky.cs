@@ -3,7 +3,7 @@
 public class Blinky : Ghost
 {
     
-    public Blinky() : base(325, 315, 50, 50)
+    public Blinky(IWorld world) : base(world,325, 315, 50, 50)
     {
         speed = 8;
         image = baseImage = Image.FromFile(@"pictures\blinky.png");
@@ -15,8 +15,8 @@ public class Blinky : Ghost
 
     public void Chase(Pacman pacman)
     {
-        targetXPosition = pacman.xPosition;
-        targetYPosition = pacman.yPosition;
+        targetXPosition = pacman.XPosition;
+        targetYPosition = pacman.YPosition;
         GhostDecision(targetXPosition, targetYPosition);
     }
 
@@ -29,6 +29,6 @@ public class Blinky : Ghost
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
+        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
     }
 }

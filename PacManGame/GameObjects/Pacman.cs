@@ -4,7 +4,7 @@ public class Pacman : GameActor
 {
     private bool isDead;
 
-    public Pacman() : base(330, 465, 50, 50)
+    public Pacman(IWorld world) : base(world,330, 465, 50, 50)
     {
         speed = 7;
         image = baseImage = Image.FromFile(@"pictures\pacman.png");
@@ -16,14 +16,13 @@ public class Pacman : GameActor
 
     public void CollectDots()
     {
-        foreach (var dot in LevelFactory.PacDots)
+        foreach (var dot in World.PacDots)
         {
             
             if (viewangle != ViewAngle.None && WouldOverlap(dot))
             {
-                LevelFactory.PacDots.Remove(dot);
-                player.Score += 10;
-                totalPacDots--;
+                World.PacDots.Remove(dot);
+                //player.Score += 10;
                 break;
             }
         }
@@ -31,13 +30,13 @@ public class Pacman : GameActor
 
     public void CollectPowerPallets()
     {
-        foreach (var powerPallet in LevelFactory.PowerPallets)
+        foreach (var powerPallet in World.PowerPallets)
         {
             
             if (viewangle != ViewAngle.None && WouldOverlap(powerPallet))
             {
-                LevelFactory.PowerPallets.Remove(powerPallet);
-                player.Score += 50;
+                World.PowerPallets.Remove(powerPallet);
+                //player.Score += 50;
                 break;
             }
         }
@@ -45,6 +44,6 @@ public class Pacman : GameActor
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.DrawImage(image, xPosition, yPosition, width, height);
+        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
     }
 }

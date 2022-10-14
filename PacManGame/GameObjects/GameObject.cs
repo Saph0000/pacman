@@ -2,20 +2,19 @@
 
 public abstract class GameObject
 {
-    public int xPosition;
-    public int yPosition;
-    public int width;
-    public int height;
-    public int totalPacDots = 240;
-    
-    public Player player = new Player();
+    protected IWorld World { get; }
+    public int XPosition { get; set; }
+    public int YPosition { get; set; }
+    public int Width { get; }
+    public int Height { get; }
 
-    protected GameObject(int xPosition, int yPosition, int width, int height)
+    protected GameObject(IWorld world, int xPosition, int yPosition, int width, int height)
     {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
+        World = world;
+        XPosition = xPosition;
+        YPosition = yPosition;
+        Width = width;
+        Height = height;
     }
 
     protected bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus = 0, int yPlus = 0) =>
@@ -30,13 +29,14 @@ public abstract class GameObject
 
     protected bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, int xPlus = 0, int yPlus = 0)
     {
-        var leftX = Math.Max(xPosition + xPlus + xDelta, gameObject.xPosition);
-        var rightX = Math.Min(xPosition + xPlus + xDelta + width, gameObject.xPosition + gameObject.width);
-        var topY= Math.Max(yPosition + yPlus + yDelta, gameObject.yPosition);
-        var bottomY = Math.Min(yPosition + yPlus + yDelta + height, gameObject.yPosition + gameObject.height);
+        var leftX = Math.Max(XPosition + xPlus + xDelta, gameObject.XPosition);
+        var rightX = Math.Min(XPosition + xPlus + xDelta + Width, gameObject.XPosition + gameObject.Width);
+        var topY= Math.Max(YPosition + yPlus + yDelta, gameObject.YPosition);
+        var bottomY = Math.Min(YPosition + yPlus + yDelta + Height, gameObject.YPosition + gameObject.Height);
         return leftX < rightX && topY < bottomY;
     }
-
     
-    public abstract void Draw(PaintEventArgs paintEventArgs);
+    public virtual void Draw(PaintEventArgs paintEventArgs)
+    {
+    }
 }

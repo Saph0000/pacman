@@ -7,7 +7,7 @@ public abstract class Ghost : GameActor
     private static readonly Random random = new();
     public int targetXPosition;
     public int targetYPosition;
-    protected Ghost(int xPosition, int yPosition, int width, int height) : base(xPosition, yPosition, width, height)
+    protected Ghost(IWorld world, int xPosition, int yPosition, int width, int height) : base(world, xPosition, yPosition, width, height)
     {
     }
 
@@ -28,16 +28,16 @@ public abstract class Ghost : GameActor
             switch (viewAngle)
             {
                 case ViewAngle.Up:
-                    upDistance = CalculateDistance(targetXPosition - xPosition, targetYPosition - (yPosition - 50));
+                    upDistance = CalculateDistance(targetXPosition - XPosition, targetYPosition - (YPosition - 50));
                     break;
                 case ViewAngle.Down:
-                    downDistance = CalculateDistance(targetXPosition - xPosition, targetYPosition - (yPosition + 50));
+                    downDistance = CalculateDistance(targetXPosition - XPosition, targetYPosition - (YPosition + 50));
                     break;
                 case ViewAngle.Right:
-                    rightDistance = CalculateDistance(targetXPosition - (xPosition + 50), targetYPosition - yPosition);
+                    rightDistance = CalculateDistance(targetXPosition - (XPosition + 50), targetYPosition - YPosition);
                     break;
                 case ViewAngle.Left:
-                    leftDistance = CalculateDistance(targetXPosition - (xPosition - 50), targetYPosition - yPosition);
+                    leftDistance = CalculateDistance(targetXPosition - (XPosition - 50), targetYPosition - YPosition);
                     break;
 
             }
