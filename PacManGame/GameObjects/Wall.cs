@@ -8,6 +8,6 @@ public class Wall : GameObject
 
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.FillRectangle(Brushes.DarkBlue, XPosition, YPosition, this.Width, this.Height);
+        e.Graphics.FillRectangle(Brushes.DarkBlue, XPosition, YPosition, Width, Height);
     }
 }

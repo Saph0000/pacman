@@ -6,9 +6,8 @@ public abstract class GameActor : GameObject
     public ViewAngle nextViewangle;
     public int speed;
     private bool isDead;
-    public int currFrame = 0;
+    public int currFrame;
     public Image image;
-    public Image baseImage;
     public string[] left;
     public string[] right;
     public string[] up;
@@ -22,7 +21,7 @@ public abstract class GameActor : GameObject
     {
         image = viewangle switch
         {
-            ViewAngle.None => baseImage,
+            ViewAngle.None => image,
             ViewAngle.Right => Image.FromFile(@"pictures\" + right[currFrame] + ".png"),
             ViewAngle.Left => Image.FromFile(@"pictures\" + left[currFrame] + ".png"),
             ViewAngle.Up => Image.FromFile(@"pictures\" + up[currFrame] + ".png"),
@@ -141,8 +140,6 @@ public abstract class GameActor : GameObject
             possibleDirections.Add(ViewAngle.Right);
         if (!WouldHitWall(ViewAngle.Left) && currentviewAngle != ViewAngle.Right)
             possibleDirections.Add(ViewAngle.Left);
-          
-
         return possibleDirections;
     }
 

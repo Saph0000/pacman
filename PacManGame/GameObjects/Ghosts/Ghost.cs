@@ -1,15 +1,16 @@
-﻿using System.Runtime.InteropServices;
-using Timer = System.Windows.Forms.Timer;
-
-namespace PacManGame.GameObjects.Ghosts;
+﻿namespace PacManGame.GameObjects.Ghosts;
 
 public abstract class Ghost : GameActor
 {
     private static readonly Random random = new();
     public int targetXPosition;
     public int targetYPosition;
+    
+    public GhostMode GhostMode { get; set; }
+    
     protected Ghost(IWorld world, int xPosition, int yPosition, int width, int height) : base(world, xPosition, yPosition, width, height)
     {
+        SetGhostImage();
     }
 
     public double CalculateDistance(int distanceX, int distanceY)
@@ -74,7 +75,7 @@ public abstract class Ghost : GameActor
     private static double Min(params double[] values) => 
         values.Min();
     
-    public void Frightend(int timerBlue, int timerFlash)
+    public void Frightend()
     {
         speed /= 2;
         var possibleDirections = CheckDirection(viewangle);
@@ -88,19 +89,29 @@ public abstract class Ghost : GameActor
 
     public void checkGhostMode()
     {
-        if (World.GhostMode == GhostMode.Chase)
+        if (GhostMode == GhostMode.Chase)
         {
             Chase(World.Pacman, World.Blinky);
-        }else if (World.GhostMode == GhostMode.Scatter)
+        }else if (GhostMode == GhostMode.Scatter)
         {
             Scatter();
-        }else if (World.GhostMode == GhostMode.Frightened)
+        }else if (GhostMode == GhostMode.Frightened)
         {
-            Frightend(8, 2);
+            Frightend();
         }
+    }
+
+    private void SetGhostImage()
+    {
+        image = Image.FromFile($@"pictures\{ImageName}_Left (1).png");
+        left = new[] { $"{ImageName}_Left (2)", $"{ImageName}_Left (1)" };
+        right = new[] { $"{ImageName}_Right (2)", $"{ImageName}_Right (1)" };
+        up = new[] { $"{ImageName}_Up (2)", $"{ImageName}_Up (1)" };
+        down = new[]{ $"{ImageName}_Down (2)", $"{ImageName}_Down (1)"};
     }
 
     public abstract void Chase(Pacman pacman, Ghost blinky);
     public abstract void Scatter();
-
+    
+    protected abstract string ImageName { get; }
 }

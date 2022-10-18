@@ -6,12 +6,9 @@ public class Inky : Ghost
     public Inky(IWorld world) : base(world,325, 315, 50, 50)
     {
         speed = 2;
-        image = baseImage = Image.FromFile(@"pictures\blinky.png");
-        left = new[] { "inky_Left (2)", "inky_Left (1)" };
-        right = new[] { "inky_Right (2)", "inky_Right (1)" };
-        up = new[] { "inky_Up (2)", "inky_Up (1)" };
-        down = new[]{ "inky_Down (2)", "inky_Down (1)"};
     }
+
+    protected override string ImageName => "inky";
 
    
     public override void Chase(Pacman pacman, Ghost blinky)
@@ -63,11 +60,6 @@ public class Inky : Ghost
         targetXPosition = 660;
         targetYPosition = 850;
         GhostDecision(targetXPosition, targetYPosition);
-    }
-
-    public void Frightend()
-    {
-        
     }
 
     public override void Draw(PaintEventArgs e)

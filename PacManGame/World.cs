@@ -14,12 +14,12 @@ public sealed class World : IWorld
         Walls = WorldFactory.CreateWalls(this);
         Pacman = new Pacman(this);
         Blinky = new Blinky(this);
-        Ghosts = new()
+        Ghosts = new List<Ghost>
         {
-            new Blinky(this),
+            Blinky,
             new Inky(this),
             new Pinky(this),
-            new Clyde(this),
+            new Clyde(this)
         };
     }
 
@@ -29,7 +29,7 @@ public sealed class World : IWorld
     public Pacman Pacman {  get; }
     public Blinky Blinky {  get; }
     public List<Ghost> Ghosts { get; }
-    public GhostMode GhostMode { get; set; }
+    public DateTime FrightenedStartTime { get; set; }
 
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -46,6 +46,12 @@ public sealed class World : IWorld
 
     public void Tick()
     {
+        if (DateTime.Now - FrightenedStartTime >= TimeSpan.FromSeconds(7))
+        {
+            foreach (var ghost in Ghosts) 
+                ghost.GhostMode = GhostMode.Chase;
+        }
+        
         Pacman.CouldTurn( Pacman.viewangle,  Pacman.nextViewangle);
         if (! Pacman.WouldHitWall(Pacman.nextViewangle))
         {

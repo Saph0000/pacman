@@ -8,6 +8,6 @@ public class PowerPallets : GameObject
     
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.FillEllipse(Brushes.Orange, XPosition, YPosition, this.Width, this.Height);
+        e.Graphics.FillEllipse(Brushes.Orange, XPosition, YPosition, Width, Height);
     }
 }

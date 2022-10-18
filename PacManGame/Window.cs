@@ -1,5 +1,3 @@
-using PacManGame.GameObjects;
-using PacManGame.GameObjects.Ghosts;
 using Timer = System.Windows.Forms.Timer;
 
 namespace PacManGame;
@@ -15,7 +13,6 @@ public class Window : Form
         CenterToScreen();
         KeyDown += HandleInput;
         var timer = CreateTimer();
-        world = new World();
     }
 
     private void Setup()

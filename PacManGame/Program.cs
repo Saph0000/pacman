@@ -5,7 +5,7 @@ public static class Program
     [STAThread]
     public static void Main()
     {
-        AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnError);
+        AppDomain.CurrentDomain.UnhandledException += OnError;
         ApplicationConfiguration.Initialize();
         Application.Run(new Window());
     }

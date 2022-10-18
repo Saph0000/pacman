@@ -7,7 +7,7 @@ public class Pacman : GameActor
     public Pacman(IWorld world) : base(world,330, 465, 50, 50)
     {
         speed = 7;
-        image = baseImage = Image.FromFile(@"pictures\pacman.png");
+        image = Image.FromFile(@"pictures\pacman.png");
         left = new[] { "pacman", "pacman_Left (1)", "pacman_Left (2)" };
         right = new[] { "pacman", "pacman_Right (1)", "pacman_Right (2)" };
         up = new[] { "pacman", "pacman_Up (1)", "pacman_Up (2)" };
@@ -37,7 +37,11 @@ public class Pacman : GameActor
             {
                 World.PowerPallets.Remove(powerPallet);
                 //player.Score += 50;
-                World.GhostMode = GhostMode.Frightened;
+                foreach (var ghost in World.Ghosts)
+                {
+                    ghost.GhostMode = GhostMode.Frightened;
+                    ghost.Frightend();
+                }
                 break;
             }
         }
