@@ -4,7 +4,7 @@ public class Clyde : Ghost
 {
     public Clyde(IWorld world) : base(world, 325, 315, 50, 50)
     {
-        speed = 5;
+        speed = 2;
         image = baseImage = Image.FromFile(@"pictures\clyde.png");
         left = new[] { "clyde_Left (2)", "clyde_Left (1)" };
         right = new[] { "clyde_Right (2)", "clyde_Right (1)" };
@@ -13,7 +13,7 @@ public class Clyde : Ghost
     }
 
    
-    public void Chase(Pacman pacman)
+    public override void Chase(Pacman pacman, Ghost blinky)
     {
         if (CalculateDistance(XPosition - pacman.XPosition, YPosition - pacman.YPosition) <= 200)
         {
@@ -28,7 +28,7 @@ public class Clyde : Ghost
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public void Scatter()
+    public override void Scatter()
     {
         targetXPosition = 0;
         targetYPosition = 850;

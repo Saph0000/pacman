@@ -1,4 +1,5 @@
-﻿using Timer = System.Windows.Forms.Timer;
+﻿using System.Runtime.InteropServices;
+using Timer = System.Windows.Forms.Timer;
 
 namespace PacManGame.GameObjects.Ghosts;
 
@@ -84,4 +85,22 @@ public abstract class Ghost : GameActor
         left = right = up = down = new[] { "ghost_Frightened (1)", "ghost_Frightened (2)" };
         speed *= 2;
     }
+
+    public void checkGhostMode()
+    {
+        if (World.GhostMode == GhostMode.Chase)
+        {
+            Chase(World.Pacman, World.Blinky);
+        }else if (World.GhostMode == GhostMode.Scatter)
+        {
+            Scatter();
+        }else if (World.GhostMode == GhostMode.Frightened)
+        {
+            Frightend(8, 2);
+        }
+    }
+
+    public abstract void Chase(Pacman pacman, Ghost blinky);
+    public abstract void Scatter();
+
 }

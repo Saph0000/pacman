@@ -10,4 +10,6 @@ public interface IWorld
     List<Wall> Walls { get; }
     List<Ghost> Ghosts { get; }
     Pacman Pacman { get; }
+    Blinky Blinky {  get; }
+    GhostMode GhostMode { get; set; }
 }

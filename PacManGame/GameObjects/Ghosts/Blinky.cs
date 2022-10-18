@@ -5,7 +5,7 @@ public class Blinky : Ghost
     
     public Blinky(IWorld world) : base(world,325, 315, 50, 50)
     {
-        speed = 8;
+        speed = 2;
         image = baseImage = Image.FromFile(@"pictures\blinky.png");
         left = new[] { "blinky_Left (2)", "blinky_Left (1)" };
         right = new[] { "blinky_Right (2)", "blinky_Right (1)" };
@@ -13,14 +13,14 @@ public class Blinky : Ghost
         down = new[]{ "blinky_Down (2)", "blinky_Down (1)"};
     }
 
-    public void Chase(Pacman pacman)
+    public override void Chase(Pacman pacman, Ghost blinky)
     {
         targetXPosition = pacman.XPosition;
         targetYPosition = pacman.YPosition;
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public void Scatter()
+    public override void Scatter()
     {
         targetXPosition = 660;
         targetYPosition = 0;

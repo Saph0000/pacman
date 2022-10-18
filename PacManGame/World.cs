@@ -13,6 +13,7 @@ public sealed class World : IWorld
         PowerPallets = WorldFactory.CreatePowerPallets(this);
         Walls = WorldFactory.CreateWalls(this);
         Pacman = new Pacman(this);
+        Blinky = new Blinky(this);
         Ghosts = new()
         {
             new Blinky(this),
@@ -26,7 +27,9 @@ public sealed class World : IWorld
     public List<PowerPallets> PowerPallets { get; } 
     public List<Wall> Walls { get; }
     public Pacman Pacman {  get; }
+    public Blinky Blinky {  get; }
     public List<Ghost> Ghosts { get; }
+    public GhostMode GhostMode { get; set; }
 
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -54,7 +57,7 @@ public sealed class World : IWorld
         foreach (var ghost in Ghosts)
         {
             ghost.SetToNextTurn();
-            ghost.Frightend(4, 8);
+            ghost.checkGhostMode();
         }
 
         Pacman.CollectDots();

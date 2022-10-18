@@ -5,7 +5,7 @@ public class Inky : Ghost
    
     public Inky(IWorld world) : base(world,325, 315, 50, 50)
     {
-        speed = 10;
+        speed = 2;
         image = baseImage = Image.FromFile(@"pictures\blinky.png");
         left = new[] { "inky_Left (2)", "inky_Left (1)" };
         right = new[] { "inky_Right (2)", "inky_Right (1)" };
@@ -14,7 +14,7 @@ public class Inky : Ghost
     }
 
    
-    public void Chase(Pacman pacman, Ghost blinky)
+    public override void Chase(Pacman pacman, Ghost blinky)
     { 
         int pacmanXPosition;
         int pacmanYPosition;
@@ -58,7 +58,7 @@ public class Inky : Ghost
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public void Scatter()
+    public override void Scatter()
     {
         targetXPosition = 660;
         targetYPosition = 850;

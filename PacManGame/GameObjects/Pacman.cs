@@ -37,6 +37,7 @@ public class Pacman : GameActor
             {
                 World.PowerPallets.Remove(powerPallet);
                 //player.Score += 50;
+                World.GhostMode = GhostMode.Frightened;
                 break;
             }
         }
