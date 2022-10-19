@@ -53,7 +53,12 @@ public sealed class World : IWorld
                 ghost.GhostMode = GhostMode.Chase;
                 ghost.SetGhostImage();
             }
-  
+
+            if (ghost.WouldOverlap(Pacman))
+            {
+                //score += kumulierender Wert.
+                ghost.Die();
+            }    
         }
         
         

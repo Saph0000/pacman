@@ -15,8 +15,13 @@ public abstract class GameActor : GameObject
     public string[] up;
     public string[] down;
     
-    protected GameActor(IWorld world, int xPosition, int yPosition, int width, int height) : base(world, xPosition, yPosition, width, height)
+    protected GameActor(IWorld world, int XStartPosition, int YStartPosition, int width, int height) : base(world, XStartPosition, YStartPosition, width, height)
     {
+        this.XStartPosition = XStartPosition;
+        this.YStartPosition = YStartPosition;
+        XPosition = XStartPosition;
+        YPosition = YStartPosition;
+        
     }
 
     public void DrawActor(int maxFrames)

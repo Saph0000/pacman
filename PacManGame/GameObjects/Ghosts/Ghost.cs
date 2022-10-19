@@ -8,9 +8,11 @@ public abstract class Ghost : GameActor
     
     public GhostMode GhostMode { get; set; }
     
-    protected Ghost(IWorld world, int xPosition, int yPosition, int width, int height) : base(world, xPosition, yPosition, width, height)
+    protected Ghost(IWorld world, int xStartPosition, int yStartPosition, int width, int height) : base(world, xStartPosition, yStartPosition, width, height)
     {
         SetGhostImage();
+        XPosition = xStartPosition;
+        YPosition = yStartPosition;
     }
 
     protected double CalculateDistance(int distanceX, int distanceY)
@@ -77,7 +79,7 @@ public abstract class Ghost : GameActor
     {
         speed /= 2;
         var possibleDirections = CheckDirection(viewangle);
-        viewangle = possibleDirections[Random.Next(0, possibleDirections.Count - 1)];
+        viewangle = possibleDirections[Random.Next(0, possibleDirections.Count)];
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
