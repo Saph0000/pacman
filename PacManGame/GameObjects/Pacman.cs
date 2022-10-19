@@ -40,7 +40,8 @@ public class Pacman : GameActor
                 foreach (var ghost in World.Ghosts)
                 {
                     ghost.GhostMode = GhostMode.Frightened;
-                    ghost.Frightend();
+                    ghost.Frightened();
+                    World.FrightenedStartTime = DateTime.Now;
                 }
                 break;
             }

@@ -27,7 +27,7 @@ public abstract class GameObject
             _ => true
         };
 
-    protected bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, int xPlus = 0, int yPlus = 0)
+    public bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, int xPlus = 0, int yPlus = 0)
     {
         var leftX = Math.Max(XPosition + xPlus + xDelta, gameObject.XPosition);
         var rightX = Math.Min(XPosition + xPlus + xDelta + Width, gameObject.XPosition + gameObject.Width);

@@ -2,9 +2,9 @@
 
 public abstract class Ghost : GameActor
 {
-    private static readonly Random random = new();
-    public int targetXPosition;
-    public int targetYPosition;
+    private static readonly Random Random = new();
+    protected int targetXPosition;
+    protected int targetYPosition;
     
     public GhostMode GhostMode { get; set; }
     
@@ -13,12 +13,12 @@ public abstract class Ghost : GameActor
         SetGhostImage();
     }
 
-    public double CalculateDistance(int distanceX, int distanceY)
+    protected double CalculateDistance(int distanceX, int distanceY)
     {
         return Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
     }
-    
-    public void GhostDecision(int targetXPosition, int targetYPosition)
+
+    protected void GhostDecision(int targetXPosition, int targetYPosition)
     {
         var upDistance = double.PositiveInfinity;
         var downDistance = double.PositiveInfinity;
@@ -65,21 +65,19 @@ public abstract class Ghost : GameActor
             Move();
         }
 
-        if (distance == leftDistance)
-        {
-            viewangle = ViewAngle.Left;
-            Move();
-        }
+        if (distance != leftDistance) return;
+        viewangle = ViewAngle.Left;
+        Move();
     }
 
     private static double Min(params double[] values) => 
         values.Min();
     
-    public void Frightend()
+    public void Frightened()
     {
         speed /= 2;
         var possibleDirections = CheckDirection(viewangle);
-        viewangle = possibleDirections[random.Next(0, possibleDirections.Count - 1)];
+        viewangle = possibleDirections[Random.Next(0, possibleDirections.Count - 1)];
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
@@ -87,21 +85,23 @@ public abstract class Ghost : GameActor
         speed *= 2;
     }
 
-    public void checkGhostMode()
+    public void CheckGhostMode()
     {
-        if (GhostMode == GhostMode.Chase)
+        switch (GhostMode)
         {
-            Chase(World.Pacman, World.Blinky);
-        }else if (GhostMode == GhostMode.Scatter)
-        {
-            Scatter();
-        }else if (GhostMode == GhostMode.Frightened)
-        {
-            Frightend();
+            case GhostMode.Chase:
+                Chase(World.Pacman, World.Blinky);
+                break;
+            case GhostMode.Scatter:
+                Scatter();
+                break;
+            case GhostMode.Frightened:
+                Frightened();
+                break;
         }
     }
 
-    private void SetGhostImage()
+    public void SetGhostImage()
     {
         image = Image.FromFile($@"pictures\{ImageName}_Left (1).png");
         left = new[] { $"{ImageName}_Left (2)", $"{ImageName}_Left (1)" };

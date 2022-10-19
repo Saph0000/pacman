@@ -7,6 +7,8 @@ public abstract class GameActor : GameObject
     public int speed;
     private bool isDead;
     public int currFrame;
+    public int XStartPosition;
+    public int YStartPosition;
     public Image image;
     public string[] left;
     public string[] right;
@@ -204,5 +206,7 @@ public abstract class GameActor : GameObject
     public void Die()
     {
         isDead = true;
+        XPosition = XStartPosition;
+        YPosition = YStartPosition;
     }
 }

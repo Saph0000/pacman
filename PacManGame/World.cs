@@ -46,11 +46,16 @@ public sealed class World : IWorld
 
     public void Tick()
     {
-        if (DateTime.Now - FrightenedStartTime >= TimeSpan.FromSeconds(7))
+        foreach (var ghost in Ghosts.Where(ghost => ghost.GhostMode == GhostMode.Frightened))
         {
-            foreach (var ghost in Ghosts) 
+            if (DateTime.Now - FrightenedStartTime >= TimeSpan.FromSeconds(7))
+            {
                 ghost.GhostMode = GhostMode.Chase;
+                ghost.SetGhostImage();
+            }
+  
         }
+        
         
         Pacman.CouldTurn( Pacman.viewangle,  Pacman.nextViewangle);
         if (! Pacman.WouldHitWall(Pacman.nextViewangle))
@@ -63,7 +68,7 @@ public sealed class World : IWorld
         foreach (var ghost in Ghosts)
         {
             ghost.SetToNextTurn();
-            ghost.checkGhostMode();
+            ghost.CheckGhostMode();
         }
 
         Pacman.CollectDots();
