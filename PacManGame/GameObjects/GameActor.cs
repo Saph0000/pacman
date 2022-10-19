@@ -15,10 +15,13 @@ public abstract class GameActor : GameObject
     public string[] up;
     public string[] down;
     
-    protected GameActor(IWorld world, int XStartPosition, int YStartPosition, int width, int height) : base(world, XStartPosition, YStartPosition, width, height)
+    protected GameActor(IWorld world, int XStartPosition, int YStartPosition, int width, int height)
     {
         this.XStartPosition = XStartPosition;
         this.YStartPosition = YStartPosition;
+        Width = width;
+        Height = height;
+        World = world;
         XPosition = XStartPosition;
         YPosition = YStartPosition;
         
@@ -44,34 +47,38 @@ public abstract class GameActor : GameObject
     {
         XPosition = GetXPositionAfterMove(viewangle);
         YPosition = GetYPositionAfterMove(viewangle);
-        var x = WouldHitWall(viewangle, out var hitWall);
-        if (x)
-        {
-            switch (viewangle)
-            {
-                case ViewAngle.Right:
-                    XPosition = hitWall.XPosition - Width;
-                    break;
-                case ViewAngle.Left:
-                    XPosition = hitWall.XPosition + hitWall.Width;
-                    break;
-                case ViewAngle.Up:
-                    YPosition = hitWall.YPosition + hitWall.Height;
-                    break;
-                case ViewAngle.Down:
-                    YPosition = hitWall.YPosition - Height;
-                    break;
-            }
-        }
-        if (XPosition > Settings.ScreenWidth)
-            XPosition = -Width;
-        else if (XPosition < -Width)
-            XPosition = Settings.ScreenWidth;
-        if (YPosition > Settings.ScreenHeight)
-            YPosition = Height;
-        else if (YPosition < 0)
-            YPosition = Settings.ScreenHeight;
+        CorrectPositionAfterWouldHitWall();
+        CorrectPositionAfterLeftBorder();
     }
+
+    private void CorrectPositionAfterWouldHitWall()
+    {
+        var wouldHitWall = WouldHitWall(viewangle, out var hitWall);
+        if (wouldHitWall)
+        {
+            (XPosition, YPosition) = viewangle switch
+            {
+                ViewAngle.Right => (hitWall!.XPosition - Width, YPosition),
+                ViewAngle.Left => (hitWall!.XPosition + hitWall.Width, YPosition),
+                ViewAngle.Up => (XPosition, hitWall!.YPosition + hitWall.Height),
+                ViewAngle.Down => (XPosition, hitWall!.YPosition - Height),
+                _ => (XPosition, YPosition)
+            };
+        }
+    }
+
+    private void CorrectPositionAfterLeftBorder()
+    {
+        int CorrectPosition(int currentPosition, int lowerBound, int upperBound)
+        {
+            if (currentPosition > upperBound)
+                return lowerBound;
+            return currentPosition < lowerBound ? upperBound : currentPosition;
+        }
+        XPosition = CorrectPosition(XPosition, -Width, Settings.ScreenWidth);
+        YPosition = CorrectPosition(YPosition, -Height, Settings.ScreenHeight);
+    }
+
 
     private int GetYPositionAfterMove(ViewAngle viewangle) =>
         viewangle switch
@@ -208,10 +215,8 @@ public abstract class GameActor : GameObject
         }
        
     }
-    public void Die()
+    public virtual void Die()
     {
         isDead = true;
-        XPosition = XStartPosition;
-        YPosition = YStartPosition;
     }
 }

@@ -1,0 +1,26 @@
+[
+  {
+    "XPosition": 20,
+    "YPosition": 138,
+    "Width": 30,
+    "Height": 30
+  },
+  {
+    "XPosition": 645,
+    "YPosition": 138,
+    "Width": 30,
+    "Height": 30
+  },
+  {
+    "XPosition": 645,
+    "YPosition": 625,
+    "Width": 30,
+    "Height": 30
+  },
+  {
+    "XPosition": 20,
+    "YPosition": 625,
+    "Width": 30,
+    "Height": 30
+  }
+]

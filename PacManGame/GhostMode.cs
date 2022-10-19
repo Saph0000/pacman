@@ -5,5 +5,6 @@ public enum GhostMode
     Chase,
     Scatter,
     Frightened,
-    Off
+    Off,
+    Home
 }

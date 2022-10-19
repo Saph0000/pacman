@@ -100,7 +100,21 @@ public abstract class Ghost : GameActor
             case GhostMode.Frightened:
                 Frightened();
                 break;
+            case GhostMode.Home:
+                Home();
+                break;
         }
+    }
+
+    private void Home()
+    {
+        speed *= 2;
+        targetXPosition = XStartPosition;
+        targetYPosition = YStartPosition;
+        GhostDecision(targetXPosition, targetYPosition);
+        speed /= 2;
+        if (XPosition == (targetXPosition) && YPosition == targetYPosition)
+            GhostMode = GhostMode.Chase;
     }
 
     public void SetGhostImage()
@@ -116,4 +130,10 @@ public abstract class Ghost : GameActor
     public abstract void Scatter();
     
     protected abstract string ImageName { get; }
+
+    public override void Die()
+    {
+        GhostMode = GhostMode.Home;
+        SetGhostImage();
+    }
 }

@@ -2,20 +2,11 @@
 
 public abstract class GameObject
 {
-    protected IWorld World { get; }
+    public IWorld World { get; set; }
     public int XPosition { get; set; }
     public int YPosition { get; set; }
-    public int Width { get; }
-    public int Height { get; }
-
-    protected GameObject(IWorld world, int xPosition, int yPosition, int width, int height)
-    {
-        World = world;
-        XPosition = xPosition;
-        YPosition = yPosition;
-        Width = width;
-        Height = height;
-    }
+    public int Width { get; init; }
+    public int Height { get; init; }
 
     protected bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus = 0, int yPlus = 0) =>
         viewAngle switch

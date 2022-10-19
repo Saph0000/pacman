@@ -24,7 +24,7 @@ public sealed class World : IWorld
     }
 
     public List<PacDot> PacDots { get; }
-    public List<PowerPallets> PowerPallets { get; } 
+    public List<PowerPallet> PowerPallets { get; } 
     public List<Wall> Walls { get; }
     public Pacman Pacman {  get; }
     public Blinky Blinky {  get; }
@@ -42,6 +42,9 @@ public sealed class World : IWorld
         foreach (var ghost in Ghosts)
             ghost.Draw(eventArgs);
         Pacman.Draw(eventArgs);
+        eventArgs.Graphics.FillRectangle(Brushes.Aqua,  312,365,10,60);
+        eventArgs.Graphics.FillRectangle(Brushes.Aqua,  372,365,10,60);
+        eventArgs.Graphics.FillRectangle(Brushes.Aqua,  312,425,70,10);
     }
 
     public void Tick()

@@ -1,24 +1,25 @@
-﻿using PacManGame.GameObjects;
+﻿using System.Text.Json;
+using PacManGame.GameObjects;
 
 namespace PacManGame;
 
 public static class WorldFactory
 {
     public static List<Wall> CreateWalls(IWorld world) =>
-        LoadFile("Walls.csv", split => new Wall(world, split[0], split[1], split[2], split[3]));
-
+        CreateObjects<Wall>(world, "Walls");
+    
     public static List<PacDot> CreatePacDots(IWorld world) =>
-        LoadFile("PacDots.csv", split => new PacDot(world, split[0], split[1], split[2], split[3]));
+        CreateObjects<PacDot>(world, "PacDots");
 
-    public static List<PowerPallets> CreatePowerPallets(IWorld world) =>
-        LoadFile("PowerPallets.csv", split => new PowerPallets(world, split[0], split[1], split[2], split[3]));
-
-    private static List<TGameObject> LoadFile<TGameObject>(string fileName, Func<int[], TGameObject> mapperFunc)
-        where TGameObject : GameObject =>
-        File.ReadAllLines($"Levels\\{fileName}")
-            .Skip(1)
-            .Select(line => line.Split(';'))
-            .Select(split => split.Select(int.Parse).ToArray())
-            .Select(mapperFunc)
-            .ToList();
+    public static List<PowerPallet> CreatePowerPallets(IWorld world) =>
+        CreateObjects<PowerPallet>(world, "PowerPallets");
+    
+    private static List<TGameObject> CreateObjects<TGameObject>(IWorld world, string fileName)
+        where TGameObject : GameObject
+    {
+        var content = File.ReadAllText($"Levels\\{fileName}.json");
+        var result = JsonSerializer.Deserialize<List<TGameObject>>(content);
+        result!.ForEach(gameObject => gameObject.World = world);
+        return result;
+    }
 }

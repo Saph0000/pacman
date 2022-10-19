@@ -2,12 +2,11 @@
 
 public class Wall : GameObject
 {
-    public Wall (IWorld world, int xPosition,int yPosition, int width, int height) : base(world, xPosition, yPosition, width, height)
-    {
-    }
-
+    public bool Visible { get; set; }
+    
     public override void Draw(PaintEventArgs e)
     {
-        e.Graphics.FillRectangle(Brushes.DarkBlue, XPosition, YPosition, Width, Height);
+        if (Visible)
+            e.Graphics.FillRectangle(Brushes.DarkBlue, XPosition, YPosition, Width, Height);
     }
 }

@@ -6,7 +6,7 @@ namespace PacManGame;
 public interface IWorld
 {
     List<PacDot> PacDots { get; }
-    List<PowerPallets> PowerPallets { get; }
+    List<PowerPallet> PowerPallets { get; }
     List<Wall> Walls { get; }
     List<Ghost> Ghosts { get; }
     Pacman Pacman { get; }
