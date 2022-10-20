@@ -4,16 +4,16 @@ public abstract class GameActor : GameObject
 {
     public ViewAngle viewangle;
     public ViewAngle nextViewangle;
-    public int speed;
+    protected int speed;
     private bool isDead;
-    public int currFrame;
-    public readonly int xStartPosition;
-    public readonly int yStartPosition;
-    public Image image;
-    public string[] left;
-    public string[] right;
-    public string[] up;
-    public string[] down;
+    private int currFrame;
+    protected readonly int xStartPosition;
+    protected readonly int yStartPosition;
+    protected Image image = null!;
+    protected string[] left = null!;
+    protected string[] right = null!;
+    protected string[] up = null!;
+    protected string[] down = null!;
     
     protected GameActor(IWorld world, int xStartPosition, int yStartPosition, int width, int height)
     {
@@ -29,6 +29,9 @@ public abstract class GameActor : GameObject
 
     public void DrawActor(int maxFrames)
     {
+        currFrame++;
+        if (currFrame == maxFrames || currFrame > maxFrames)
+            currFrame = 0;
         image = viewangle switch
         {
             ViewAngle.None => image,
@@ -39,9 +42,6 @@ public abstract class GameActor : GameObject
             _ => image
         };
 
-        currFrame++;
-        if (currFrame == maxFrames)
-            currFrame = 0;
     }
     public void Move()
     {

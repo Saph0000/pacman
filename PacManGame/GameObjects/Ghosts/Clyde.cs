@@ -13,7 +13,7 @@ public class Clyde : Ghost
     protected override string ImageName => "clyde";
 
 
-    public override void Chase(Pacman pacman, Ghost blinky)
+    protected override void Chase(Pacman pacman, Ghost blinky)
     {
         if (Maths.CalculateDistance(XPosition, YPosition, pacman.XPosition, pacman.YPosition) <= 200)
         {
@@ -28,7 +28,7 @@ public class Clyde : Ghost
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public override void Scatter()
+    protected override void Scatter()
     {
         targetXPosition = 0;
         targetYPosition = 850;

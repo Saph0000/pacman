@@ -10,7 +10,7 @@ public class Pinky : Ghost
 
     protected override string ImageName => "pinky";
 
-    public override void Chase(Pacman pacman, Ghost blinky)
+    protected override void Chase(Pacman pacman, Ghost blinky)
     {
         switch (pacman.viewangle)
         {
@@ -36,7 +36,7 @@ public class Pinky : Ghost
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public override void Scatter()
+    protected override void Scatter()
     {
         targetXPosition = 20;
         targetYPosition = 0;

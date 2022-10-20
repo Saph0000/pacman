@@ -6,6 +6,4 @@ public class PacDot : GameObject
     {
         e.Graphics.FillEllipse(Brushes.Yellow, XPosition, YPosition, Width, Height);
     }
-
-    
 }

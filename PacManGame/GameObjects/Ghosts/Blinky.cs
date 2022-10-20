@@ -9,15 +9,15 @@ public class Blinky : Ghost
     }
 
     protected override string ImageName => "blinky";
-    
-    public override void Chase(Pacman pacman, Ghost blinky)
+
+    protected override void Chase(Pacman pacman, Ghost blinky)
     {
         targetXPosition = pacman.XPosition;
         targetYPosition = pacman.YPosition;
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public override void Scatter()
+    protected override void Scatter()
     {
         targetXPosition = 660;
         targetYPosition = 0;

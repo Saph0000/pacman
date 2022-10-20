@@ -1,12 +1,12 @@
-﻿using PacManGame.Helper;
+﻿using static PacManGame.Helper.Maths;
 
 namespace PacManGame.GameObjects.Ghosts;
 
 public abstract class Ghost : GameActor
 {
     private static readonly Random Random = new();
-    protected int targetXPosition;
-    protected int targetYPosition;
+    public int targetXPosition;
+    public int targetYPosition;
     protected int currentSpeed;
     
     public GhostMode GhostMode { get; set; }
@@ -20,53 +20,25 @@ public abstract class Ghost : GameActor
 
     protected void GhostDecision(int targetXPosition, int targetYPosition)
     {
-        var upDistance = double.PositiveInfinity;
-        var downDistance = double.PositiveInfinity;
-        var rightDistance = double.PositiveInfinity;
-        var leftDistance = double.PositiveInfinity;
-        
+        var minDistance = double.PositiveInfinity;
+        var minDistanceViewAngle = ViewAngle.None;
         foreach (var viewAngle in CheckDirection(viewangle))
         {
-            switch (viewAngle)
+            var distance = viewAngle switch
             {
-                case ViewAngle.Up:
-                    upDistance = Maths.CalculateDistance(targetXPosition, targetYPosition,  XPosition, YPosition - 50);
-                    break;
-                case ViewAngle.Down:
-                    downDistance = Maths.CalculateDistance(targetXPosition,  targetYPosition, XPosition, YPosition + 50);
-                    break;
-                case ViewAngle.Right:
-                    rightDistance = Maths.CalculateDistance(targetXPosition, targetYPosition, XPosition + 50, YPosition);
-                    break;
-                case ViewAngle.Left:
-                    leftDistance = Maths.CalculateDistance(targetXPosition, targetYPosition,  XPosition - 50, YPosition);
-                    break;
-
+                ViewAngle.Up => CalculateDistance(targetXPosition, targetYPosition, XPosition, YPosition - 50),
+                ViewAngle.Down => CalculateDistance(targetXPosition, targetYPosition, XPosition, YPosition + 50),
+                ViewAngle.Right => CalculateDistance(targetXPosition, targetYPosition, XPosition + 50, YPosition),
+                ViewAngle.Left => CalculateDistance(targetXPosition, targetYPosition, XPosition - 50, YPosition),
+                _ => double.PositiveInfinity
+            };
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                minDistanceViewAngle = viewAngle;
             }
         }
-
-        var distance = Maths.Min(upDistance, downDistance, leftDistance, rightDistance);
-
-        if (distance == upDistance)
-        {
-            viewangle = ViewAngle.Up;
-            Move();
-        }
-
-        if (distance == downDistance)
-        {
-            viewangle = ViewAngle.Down;
-            Move();
-        }
-
-        if (distance == rightDistance)
-        {
-            viewangle = ViewAngle.Right;
-            Move();
-        }
-
-        if (distance != leftDistance) return;
-        viewangle = ViewAngle.Left;
+        viewangle = minDistanceViewAngle;
         Move();
     }
 
@@ -78,8 +50,10 @@ public abstract class Ghost : GameActor
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
-        left = right = up = down = new[] { "ghost_Frightened (1)", "ghost_Frightened (2)" };
+        left = right = up = down = new[] { "ghost_Frightened (1)", "ghost_Frightened (2)", "ghost_Frightened (3)", "ghost_Frightened (4)" };
         speed *= 2;
+        
+        
     }
 
     public void CheckGhostMode()
@@ -98,15 +72,18 @@ public abstract class Ghost : GameActor
             case GhostMode.Home:
                 Home();
                 break;
+            case GhostMode.Off:
+            default:
+                break;
         }
     }
 
     private void Home()
     {
-        left = new[] { "home_Left", "home_Left" };
-        right =  new[] { "home_Right", "home_Right" };
-        up = new[] { "home_Up", "home_Up" };
-        down = new[] { "home_Down", "home_Down" };
+        left = new[] { "home_Left" };
+        right =  new[] { "home_Right" };
+        up = new[] { "home_Up" };
+        down = new[] { "home_Down" };
         
         speed = 8;
         targetXPosition = xStartPosition;
@@ -129,14 +106,13 @@ public abstract class Ghost : GameActor
         down = new[]{ $"{ImageName}_Down (2)", $"{ImageName}_Down (1)"};
     }
 
-    public abstract void Chase(Pacman pacman, Ghost blinky);
-    public abstract void Scatter();
+    protected abstract void Chase(Pacman pacman, Ghost blinky);
+    protected abstract void Scatter();
     
     protected abstract string ImageName { get; }
 
     public override void Die()
     {
         GhostMode = GhostMode.Home;
-        SetGhostImage();
     }
 }

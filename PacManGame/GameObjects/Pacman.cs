@@ -16,13 +16,10 @@ public class Pacman : GameActor
     {
         foreach (var dot in World.PacDots)
         {
-            
-            if (viewangle != ViewAngle.None && WouldOverlap(dot))
-            {
-                World.PacDots.Remove(dot);
-                //player.Score += 10;
-                break;
-            }
+            if (viewangle == ViewAngle.None || !WouldOverlap(dot)) continue;
+            World.PacDots.Remove(dot);
+            //player.Score += 10;
+            break;
         }
     }
 

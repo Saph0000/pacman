@@ -11,8 +11,8 @@ public class Inky : Ghost
 
     protected override string ImageName => "inky";
 
-   
-    public override void Chase(Pacman pacman, Ghost blinky)
+
+    protected override void Chase(Pacman pacman, Ghost blinky)
     { 
         int pacmanXPosition;
         int pacmanYPosition;
@@ -56,7 +56,7 @@ public class Inky : Ghost
         GhostDecision(targetXPosition, targetYPosition);
     }
 
-    public override void Scatter()
+    protected override void Scatter()
     {
         targetXPosition = 660;
         targetYPosition = 850;

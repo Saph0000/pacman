@@ -88,7 +88,18 @@ public sealed class World : IWorld
         if (frame == 10)
         {
             foreach (var ghost in Ghosts)
-                ghost.DrawActor(2);
+            {
+                if(ghost.GhostMode == GhostMode.Frightened)
+                    ghost.DrawActor(4);
+                else if (ghost.GhostMode == GhostMode.Home)
+                {
+                    ghost.DrawActor(1);
+                }else
+                {
+                    ghost.DrawActor(2);
+                }
+            }
+            
             frame = 0;
         }
     }
