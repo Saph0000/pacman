@@ -62,9 +62,4 @@ public class Inky : Ghost
         targetYPosition = 850;
         GhostDecision(targetXPosition, targetYPosition);
     }
-
-    public override void Draw(PaintEventArgs e)
-    {
-        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
-    }
 }

@@ -5,11 +5,13 @@ public class Pacman : GameActor
     public Pacman(IWorld world) : base(world,330, 465, 50, 50)
     {
         speed = 7;
-        image = Image.FromFile(@"pictures\pacman.png");
+        //image = Image.FromFile(@"pictures\pacman.png");
+        /*
         left = new[] { "pacman", "pacman_Left (1)", "pacman_Left (2)" };
         right = new[] { "pacman", "pacman_Right (1)", "pacman_Right (2)" };
         up = new[] { "pacman", "pacman_Up (1)", "pacman_Up (2)" };
         down = new[]{ "pacman", "pacman_Down (1)", "pacman_Down (2)"};
+        */
     }
 
     public void CollectDots()
@@ -44,8 +46,10 @@ public class Pacman : GameActor
         }
     }
 
-    public override void Draw(PaintEventArgs e)
+    protected override string[] GetImageNames()
     {
-        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
+        if (viewangle == ViewAngle.None)
+            return new[] { "pacman_None" };
+        return new[] { "pacman_None", "pacman_" + viewangle + " (1)", "pacman_" + viewangle + " (2)" };
     }
 }

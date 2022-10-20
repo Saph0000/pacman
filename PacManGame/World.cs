@@ -21,6 +21,8 @@ public sealed class World : IWorld
             new Pinky(this),
             new Clyde(this)
         };
+        ImageMap = Directory.GetFiles("Pictures", "*.png")
+            .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
     }
 
     public List<PacDot> PacDots { get; }
@@ -28,8 +30,9 @@ public sealed class World : IWorld
     public List<Wall> Walls { get; }
     public Pacman Pacman {  get; }
     public Blinky Blinky {  get; }
-    public List<Ghost> Ghosts { get; }
     public DateTime FrightenedStartTime { get; set; }
+    public List<Ghost> Ghosts { get; }
+    public IDictionary<string, Image> ImageMap { get; }
 
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -48,11 +51,6 @@ public sealed class World : IWorld
     {
         foreach (var ghost in Ghosts.Where(ghost => ghost.GhostMode == GhostMode.Frightened))
         {
-            if (DateTime.Now - FrightenedStartTime >= TimeSpan.FromSeconds(7))
-            {
-                ghost.GhostMode = GhostMode.Chase;
-                ghost.SetGhostImage();
-            }
 
             if (ghost.WouldOverlap(Pacman))
             {
@@ -82,22 +80,14 @@ public sealed class World : IWorld
         frame++;
         if (frame is 5 or 10 )
         {
-            Pacman.DrawActor(3);
+            Pacman.AnimateActor();
         }
 
         if (frame == 10)
         {
             foreach (var ghost in Ghosts)
             {
-                if(ghost.GhostMode == GhostMode.Frightened)
-                    ghost.DrawActor(4);
-                else if (ghost.GhostMode == GhostMode.Home)
-                {
-                    ghost.DrawActor(1);
-                }else
-                {
-                    ghost.DrawActor(2);
-                }
+                ghost.AnimateActor();
             }
             
             frame = 0;

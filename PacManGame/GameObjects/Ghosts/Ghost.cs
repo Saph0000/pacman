@@ -5,15 +5,14 @@ namespace PacManGame.GameObjects.Ghosts;
 public abstract class Ghost : GameActor
 {
     private static readonly Random Random = new();
-    public int targetXPosition;
-    public int targetYPosition;
+    protected int targetXPosition;
+    protected int targetYPosition;
     protected int currentSpeed;
     
     public GhostMode GhostMode { get; set; }
     
     protected Ghost(IWorld world, int xStartPosition, int yStartPosition, int width, int height) : base(world, xStartPosition, yStartPosition, width, height)
     {
-        SetGhostImage();
         XPosition = xStartPosition;
         YPosition = yStartPosition;
     }
@@ -44,13 +43,18 @@ public abstract class Ghost : GameActor
 
     public void Frightened()
     {
+        if (DateTime.Now - World.FrightenedStartTime >= TimeSpan.FromSeconds(7))
+        {
+            GhostMode = GhostMode.Chase;
+        }
+
+        maxFrame = DateTime.Now - World.FrightenedStartTime <= TimeSpan.FromSeconds(4) ? 2 : 0;
         speed /= 2;
         var possibleDirections = CheckDirection(viewangle);
         viewangle = possibleDirections.Any() ? possibleDirections[Random.Next(0, possibleDirections.Count)] : ViewAngle.None;
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
-        left = right = up = down = new[] { "ghost_Frightened (1)", "ghost_Frightened (2)", "ghost_Frightened (3)", "ghost_Frightened (4)" };
         speed *= 2;
         
         
@@ -80,11 +84,6 @@ public abstract class Ghost : GameActor
 
     private void Home()
     {
-        left = new[] { "home_Left" };
-        right =  new[] { "home_Right" };
-        up = new[] { "home_Up" };
-        down = new[] { "home_Down" };
-        
         speed = 8;
         targetXPosition = xStartPosition;
         targetYPosition = yStartPosition;
@@ -93,18 +92,19 @@ public abstract class Ghost : GameActor
         {
             GhostMode = GhostMode.Chase;
             speed = currentSpeed;
-            SetGhostImage();
         }
     }
 
-    public void SetGhostImage()
-    {
-        image = Image.FromFile($@"pictures\{ImageName}_Left (1).png");
-        left = new[] { $"{ImageName}_Left (2)", $"{ImageName}_Left (1)" };
-        right = new[] { $"{ImageName}_Right (2)", $"{ImageName}_Right (1)" };
-        up = new[] { $"{ImageName}_Up (2)", $"{ImageName}_Up (1)" };
-        down = new[]{ $"{ImageName}_Down (2)", $"{ImageName}_Down (1)"};
-    }
+    protected override string[] GetImageNames() =>
+        GhostMode switch
+        {
+            GhostMode.Frightened => new[]
+            {
+                "ghost_Frightened (1)", "ghost_Frightened (2)", "ghost_Frightened (3)", "ghost_Frightened (4)"
+            },
+            GhostMode.Home => new[] { $"home_{viewangle}" },
+            _ => new[] { $"{ImageName}_{viewangle} (1)", $"{ImageName}_{viewangle} (2)" }
+        };
 
     protected abstract void Chase(Pacman pacman, Ghost blinky);
     protected abstract void Scatter();

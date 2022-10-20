@@ -12,4 +12,5 @@ public interface IWorld
     Pacman Pacman { get; }
     Blinky Blinky {  get; }
     DateTime FrightenedStartTime { get; set; }
+    public IDictionary<string, Image> ImageMap { get; }
 }

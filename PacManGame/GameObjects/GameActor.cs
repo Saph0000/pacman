@@ -9,11 +9,7 @@ public abstract class GameActor : GameObject
     private int currFrame;
     protected readonly int xStartPosition;
     protected readonly int yStartPosition;
-    protected Image image = null!;
-    protected string[] left = null!;
-    protected string[] right = null!;
-    protected string[] up = null!;
-    protected string[] down = null!;
+    protected int maxFrame = 0;
     
     protected GameActor(IWorld world, int xStartPosition, int yStartPosition, int width, int height)
     {
@@ -27,22 +23,16 @@ public abstract class GameActor : GameObject
         
     }
 
-    public void DrawActor(int maxFrames)
+    public void AnimateActor()
     {
+        var images = GetImageNames();
         currFrame++;
-        if (currFrame == maxFrames || currFrame > maxFrames)
+        if (maxFrame == 0)
+            maxFrame = images.Length;
+        if (currFrame >= maxFrame)
             currFrame = 0;
-        image = viewangle switch
-        {
-            ViewAngle.None => image,
-            ViewAngle.Right => Image.FromFile(@"pictures\" + right[currFrame] + ".png"),
-            ViewAngle.Left => Image.FromFile(@"pictures\" + left[currFrame] + ".png"),
-            ViewAngle.Up => Image.FromFile(@"pictures\" + up[currFrame] + ".png"),
-            ViewAngle.Down => Image.FromFile(@"pictures\" + down[currFrame] + ".png"),
-            _ => image
-        };
-
     }
+    
     public void Move()
     {
         XPosition = GetXPositionAfterMove(viewangle);
@@ -217,6 +207,19 @@ public abstract class GameActor : GameObject
         }
        
     }
+    
+    public override void Draw(PaintEventArgs e)
+    {
+        var imageNames = GetImageNames();
+        var imageName = currFrame >= imageNames.Length ? imageNames[0] : imageNames[currFrame];
+        if (!World.ImageMap.ContainsKey(imageName)) 
+            return;
+        var image = World.ImageMap[imageName];
+        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
+    }
+
+    protected abstract string[] GetImageNames();
+    
     public virtual void Die()
     {
         isDead = true;

@@ -42,9 +42,4 @@ public class Pinky : Ghost
         targetYPosition = 0;
         GhostDecision(targetXPosition, targetYPosition);
     }
-
-    public override void Draw(PaintEventArgs e)
-    {
-        e.Graphics.DrawImage(image, XPosition, YPosition, Width, Height);
-    }
 }
