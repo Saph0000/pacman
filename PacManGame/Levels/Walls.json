@@ -274,9 +274,9 @@
   },
   {
     "Visible": true,
-    "XPosition": 373,
+    "XPosition": 375,
     "YPosition": 365,
-    "Width": 62,
+    "Width": 60,
     "Height": 10
   },
   {
@@ -390,5 +390,26 @@
     "YPosition": 665,
     "Width": 25,
     "Height": 100
+  },
+  {
+    "Visible": true,
+    "XPosition": 315,
+    "YPosition": 365,
+    "Width": 10,
+    "Height": 60
+  },
+  {
+    "Visible": true,
+    "XPosition": 375,
+    "YPosition": 365,
+    "Width": 10,
+    "Height": 60
+  },
+  {
+    "Visible": true,
+    "XPosition": 315,
+    "YPosition": 425,
+    "Width": 70,
+    "Height": 10
   }
 ]

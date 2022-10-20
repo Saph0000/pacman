@@ -36,12 +36,13 @@ public class Pacman : GameActor
             if (viewangle != ViewAngle.None && WouldOverlap(powerPallet))
             {
                 World.PowerPallets.Remove(powerPallet);
+                World.FrightenedStartTime = DateTime.Now;
                 //player.Score += 50;
                 foreach (var ghost in World.Ghosts)
                 {
+                    if (ghost.GhostMode == GhostMode.Home) continue;
                     ghost.GhostMode = GhostMode.Frightened;
                     ghost.Frightened();
-                    World.FrightenedStartTime = DateTime.Now;
                 }
                 break;
             }

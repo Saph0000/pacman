@@ -42,9 +42,6 @@ public sealed class World : IWorld
         foreach (var ghost in Ghosts)
             ghost.Draw(eventArgs);
         Pacman.Draw(eventArgs);
-        eventArgs.Graphics.FillRectangle(Brushes.Aqua,  312,365,10,60);
-        eventArgs.Graphics.FillRectangle(Brushes.Aqua,  372,365,10,60);
-        eventArgs.Graphics.FillRectangle(Brushes.Aqua,  312,425,70,10);
     }
 
     public void Tick()

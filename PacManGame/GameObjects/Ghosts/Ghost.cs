@@ -1,10 +1,13 @@
-﻿namespace PacManGame.GameObjects.Ghosts;
+﻿using PacManGame.Helper;
+
+namespace PacManGame.GameObjects.Ghosts;
 
 public abstract class Ghost : GameActor
 {
     private static readonly Random Random = new();
     protected int targetXPosition;
     protected int targetYPosition;
+    protected int currentSpeed;
     
     public GhostMode GhostMode { get; set; }
     
@@ -13,11 +16,6 @@ public abstract class Ghost : GameActor
         SetGhostImage();
         XPosition = xStartPosition;
         YPosition = yStartPosition;
-    }
-
-    protected double CalculateDistance(int distanceX, int distanceY)
-    {
-        return Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
     }
 
     protected void GhostDecision(int targetXPosition, int targetYPosition)
@@ -32,22 +30,22 @@ public abstract class Ghost : GameActor
             switch (viewAngle)
             {
                 case ViewAngle.Up:
-                    upDistance = CalculateDistance(targetXPosition - XPosition, targetYPosition - (YPosition - 50));
+                    upDistance = Maths.CalculateDistance(targetXPosition, targetYPosition,  XPosition, YPosition - 50);
                     break;
                 case ViewAngle.Down:
-                    downDistance = CalculateDistance(targetXPosition - XPosition, targetYPosition - (YPosition + 50));
+                    downDistance = Maths.CalculateDistance(targetXPosition,  targetYPosition, XPosition, YPosition + 50);
                     break;
                 case ViewAngle.Right:
-                    rightDistance = CalculateDistance(targetXPosition - (XPosition + 50), targetYPosition - YPosition);
+                    rightDistance = Maths.CalculateDistance(targetXPosition, targetYPosition, XPosition + 50, YPosition);
                     break;
                 case ViewAngle.Left:
-                    leftDistance = CalculateDistance(targetXPosition - (XPosition - 50), targetYPosition - YPosition);
+                    leftDistance = Maths.CalculateDistance(targetXPosition, targetYPosition,  XPosition - 50, YPosition);
                     break;
 
             }
         }
 
-        var distance = Min(upDistance, downDistance, leftDistance, rightDistance);
+        var distance = Maths.Min(upDistance, downDistance, leftDistance, rightDistance);
 
         if (distance == upDistance)
         {
@@ -72,14 +70,11 @@ public abstract class Ghost : GameActor
         Move();
     }
 
-    private static double Min(params double[] values) => 
-        values.Min();
-    
     public void Frightened()
     {
         speed /= 2;
         var possibleDirections = CheckDirection(viewangle);
-        viewangle = possibleDirections[Random.Next(0, possibleDirections.Count)];
+        viewangle = possibleDirections.Any() ? possibleDirections[Random.Next(0, possibleDirections.Count)] : ViewAngle.None;
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
@@ -108,13 +103,21 @@ public abstract class Ghost : GameActor
 
     private void Home()
     {
-        speed *= 2;
+        left = new[] { "home_Left", "home_Left" };
+        right =  new[] { "home_Right", "home_Right" };
+        up = new[] { "home_Up", "home_Up" };
+        down = new[] { "home_Down", "home_Down" };
+        
+        speed = 8;
         targetXPosition = XStartPosition;
         targetYPosition = YStartPosition;
         GhostDecision(targetXPosition, targetYPosition);
-        speed /= 2;
-        if (XPosition == (targetXPosition) && YPosition == targetYPosition)
+        if (XPosition == targetXPosition && YPosition == targetYPosition)
+        {
             GhostMode = GhostMode.Chase;
+            speed = currentSpeed;
+            SetGhostImage();
+        }
     }
 
     public void SetGhostImage()

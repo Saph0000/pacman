@@ -2,9 +2,10 @@
 
 public class Pinky : Ghost
 {
-    public Pinky(IWorld world) : base(world,325, 315, 50, 50)
+    public Pinky(IWorld world) : base(world,325, 375, 50, 50)
     {
         speed = 2;
+        currentSpeed = speed;
     }
 
     protected override string ImageName => "pinky";

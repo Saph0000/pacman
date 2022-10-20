@@ -3,9 +3,10 @@
 public class Inky : Ghost
 {
    
-    public Inky(IWorld world) : base(world,325, 315, 50, 50)
+    public Inky(IWorld world) : base(world,325, 375, 50, 50)
     {
         speed = 2;
+        currentSpeed = speed;
     }
 
     protected override string ImageName => "inky";
