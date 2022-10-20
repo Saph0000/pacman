@@ -7,23 +7,23 @@ public abstract class GameActor : GameObject
     public int speed;
     private bool isDead;
     public int currFrame;
-    public int XStartPosition;
-    public int YStartPosition;
+    public readonly int xStartPosition;
+    public readonly int yStartPosition;
     public Image image;
     public string[] left;
     public string[] right;
     public string[] up;
     public string[] down;
     
-    protected GameActor(IWorld world, int XStartPosition, int YStartPosition, int width, int height)
+    protected GameActor(IWorld world, int xStartPosition, int yStartPosition, int width, int height)
     {
-        this.XStartPosition = XStartPosition;
-        this.YStartPosition = YStartPosition;
+        this.xStartPosition = xStartPosition;
+        this.yStartPosition = yStartPosition;
         Width = width;
         Height = height;
         World = world;
-        XPosition = XStartPosition;
-        YPosition = YStartPosition;
+        XPosition = xStartPosition;
+        YPosition = yStartPosition;
         
     }
 
@@ -80,16 +80,16 @@ public abstract class GameActor : GameObject
     }
 
 
-    private int GetYPositionAfterMove(ViewAngle viewangle) =>
-        viewangle switch
+    private int GetYPositionAfterMove(ViewAngle viewAngle) =>
+        viewAngle switch
         {
             ViewAngle.Up => YPosition - speed,
             ViewAngle.Down => YPosition + speed,
             _ => YPosition
         };
 
-    private int GetXPositionAfterMove(ViewAngle viewangle) =>
-        viewangle switch
+    private int GetXPositionAfterMove(ViewAngle viewAngle) =>
+        viewAngle switch
         {
             ViewAngle.Right => XPosition + speed,
             ViewAngle.Left => XPosition - speed,
@@ -103,20 +103,20 @@ public abstract class GameActor : GameObject
         switch (currentViewAngle)
         {
             case ViewAngle.Right:
-                if (XPosition + Width > hitWall.XPosition + hitWall.Height &&
+                if (XPosition + Width > hitWall!.XPosition + hitWall.Height &&
                     GetXPositionAfterMove(viewangle) >= hitWall.XPosition + hitWall.Width)
                     XPosition = hitWall.XPosition + hitWall.Width;
                 break;
             case ViewAngle.Left:
-                if (XPosition < hitWall.XPosition && GetXPositionAfterMove(viewangle) + Width <= hitWall.XPosition)
+                if (XPosition < hitWall!.XPosition && GetXPositionAfterMove(viewangle) + Width <= hitWall.XPosition)
                     XPosition = hitWall.XPosition - Width;
                 break;
             case ViewAngle.Up:
-                if (YPosition < hitWall.YPosition && !(GetYPositionAfterMove(viewangle) + Height >= hitWall.YPosition))
+                if (YPosition < hitWall!.YPosition && !(GetYPositionAfterMove(viewangle) + Height >= hitWall.YPosition))
                     YPosition = hitWall.YPosition - Height;
                 break;
             case ViewAngle.Down:
-                if (YPosition + Height > hitWall.YPosition + hitWall.Width && 
+                if (YPosition + Height > hitWall!.YPosition + hitWall.Width && 
                     GetYPositionAfterMove(viewangle) >= hitWall.YPosition + hitWall.Height)
                     YPosition = hitWall.YPosition + hitWall.Height;
                 break;
@@ -125,11 +125,11 @@ public abstract class GameActor : GameObject
     
     public bool WouldHitWall(ViewAngle viewAngle) =>
         WouldHitWall(viewAngle, out _, 0, 0);
-    
-    public bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall) =>
+
+    private bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall) =>
         WouldHitWall(viewAngle, out hitWall, 0, 0);
-    
-    public bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall, int xPlus, int yPlus)
+
+    private bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall, int xPlus, int yPlus)
     {
         hitWall = null;
         foreach (var wall in World.Walls)
@@ -143,24 +143,24 @@ public abstract class GameActor : GameObject
         return false;
     }
 
-    public List<ViewAngle> CheckDirection(ViewAngle currentviewAngle)
+    protected List<ViewAngle> CheckDirection(ViewAngle currentViewAngle)
     {
         var possibleDirections = new List<ViewAngle>();
-        if (!WouldHitWall(ViewAngle.Up) && currentviewAngle != ViewAngle.Down)
+        if (!WouldHitWall(ViewAngle.Up) && currentViewAngle != ViewAngle.Down)
             possibleDirections.Add(ViewAngle.Up);
-        if(!WouldHitWall(ViewAngle.Down) && currentviewAngle != ViewAngle.Up)
+        if(!WouldHitWall(ViewAngle.Down) && currentViewAngle != ViewAngle.Up)
             possibleDirections.Add(ViewAngle.Down);
-        if (!WouldHitWall(ViewAngle.Right) && currentviewAngle != ViewAngle.Left)
+        if (!WouldHitWall(ViewAngle.Right) && currentViewAngle != ViewAngle.Left)
             possibleDirections.Add(ViewAngle.Right);
-        if (!WouldHitWall(ViewAngle.Left) && currentviewAngle != ViewAngle.Right)
+        if (!WouldHitWall(ViewAngle.Left) && currentViewAngle != ViewAngle.Right)
             possibleDirections.Add(ViewAngle.Left);
         return possibleDirections;
     }
 
     public void SetToNextTurn()
     {
-        int yPlus = 0;
-        int xPlus = 0;
+        var yPlus = 0;
+        var xPlus = 0;
         switch (viewangle)
         {
             case ViewAngle.Right:
@@ -211,7 +211,9 @@ public abstract class GameActor : GameObject
                     yPlus++;
                 }
                 break;
-                
+
+            case ViewAngle.None:
+                break;
         }
        
     }

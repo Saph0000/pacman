@@ -2,8 +2,6 @@
 
 public class Pacman : GameActor
 {
-    private bool isDead;
-
     public Pacman(IWorld world) : base(world,330, 465, 50, 50)
     {
         speed = 7;

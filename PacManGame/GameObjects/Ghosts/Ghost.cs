@@ -109,8 +109,8 @@ public abstract class Ghost : GameActor
         down = new[] { "home_Down", "home_Down" };
         
         speed = 8;
-        targetXPosition = XStartPosition;
-        targetYPosition = YStartPosition;
+        targetXPosition = xStartPosition;
+        targetYPosition = yStartPosition;
         GhostDecision(targetXPosition, targetYPosition);
         if (XPosition == targetXPosition && YPosition == targetYPosition)
         {

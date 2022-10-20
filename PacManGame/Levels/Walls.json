@@ -392,21 +392,21 @@
     "Height": 100
   },
   {
-    "Visible": true,
+    "Visible": false,
     "XPosition": 315,
     "YPosition": 365,
     "Width": 10,
     "Height": 60
   },
   {
-    "Visible": true,
+    "Visible": false,
     "XPosition": 375,
     "YPosition": 365,
     "Width": 10,
     "Height": 60
   },
   {
-    "Visible": true,
+    "Visible": false,
     "XPosition": 315,
     "YPosition": 425,
     "Width": 70,
