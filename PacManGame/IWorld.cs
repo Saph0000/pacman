@@ -13,4 +13,5 @@ public interface IWorld
     Blinky Blinky {  get; }
     DateTime FrightenedStartTime { get; set; }
     public IDictionary<string, Image> ImageMap { get; }
+    public int TotalFrightenedTime { get; set; }
 }

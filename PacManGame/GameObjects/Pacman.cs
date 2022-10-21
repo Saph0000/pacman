@@ -34,6 +34,7 @@ public class Pacman : GameActor
             {
                 World.PowerPallets.Remove(powerPallet);
                 World.FrightenedStartTime = DateTime.Now;
+                World.TotalFrightenedTime += 7;
                 //player.Score += 50;
                 foreach (var ghost in World.Ghosts)
                 {

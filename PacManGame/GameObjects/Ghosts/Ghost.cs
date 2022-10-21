@@ -5,8 +5,8 @@ namespace PacManGame.GameObjects.Ghosts;
 public abstract class Ghost : GameActor
 {
     private static readonly Random Random = new();
-    protected int targetXPosition;
-    protected int targetYPosition;
+    public int targetXPosition;
+    public int targetYPosition;
     protected int currentSpeed;
     
     public GhostMode GhostMode { get; set; }
@@ -15,6 +15,7 @@ public abstract class Ghost : GameActor
     {
         XPosition = xStartPosition;
         YPosition = yStartPosition;
+        GhostMode = GhostMode.Scatter;
     }
 
     protected void GhostDecision(int targetXPosition, int targetYPosition)
