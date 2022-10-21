@@ -26,6 +26,9 @@ public sealed class World : IWorld
             .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
 
         GameStartTime = DateTime.Now;
+        ModeDurationIndex = 0;
+        NextModeChangeTime = 0;
+        ElroyModeCounter = 20;
     }
 
     public List<PacDot> PacDots { get; }
@@ -37,7 +40,9 @@ public sealed class World : IWorld
     public DateTime GameStartTime { get; set; }
     public List<Ghost> Ghosts { get; }
     public IDictionary<string, Image> ImageMap { get; }
-    public int TotalFrightenedTime { get; set; }
+    public int NextModeChangeTime { get; set; }
+    private int ModeDurationIndex { get; set; }
+    private int ElroyModeCounter { get; }
     
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -58,16 +63,15 @@ public sealed class World : IWorld
 
     }
 
-    private void StartGame()
-    {
-        GameStartTime = DateTime.Now;
-    }
-
     public void Tick()
     {
-        if(DateTime.Now -GameStartTime <= TimeSpan.FromSeconds(90))
-            GhostModeTimer(7, 20, 7, 20, 5, 20, 5);
+        if(ModeDurationIndex <= 7)
+            GhostModeTimer(7, 20, 7, 20, 5, 20, 5, 20);
 
+        if (PacDots.Count == ElroyModeCounter)
+        {
+            Blinky.ElroyMode();
+        }
 
         foreach (var ghost in Ghosts.Where(ghost => ghost.GhostMode == GhostMode.Frightened))
         {
@@ -115,37 +119,29 @@ public sealed class World : IWorld
         }
     }
 
-    private void GhostModeTimer(int firstScatter,int firstChase, int secondScatter, int secondChase,
-        int thirdScatter, int thirdChase,int fourthScatter)
+    private void GhostModeTimer(params int[] modeDurations)
     {
-        foreach (var ghost in Ghosts.Where(ghost => ghost.GhostMode is not (GhostMode.Frightened or GhostMode.Home)))
+
+        if (DateTime.Now - GameStartTime >= TimeSpan.FromSeconds(NextModeChangeTime))
         {
+            NextModeChangeTime += modeDurations[ModeDurationIndex];
+            foreach (var ghost in Ghosts)
+            {
+                switch (ghost.GhostMode)
+                {
+                    case GhostMode.Chase:
+                        ghost.viewangle = ghost.viewangle.GetOppositeDirection();
+                        ghost.GhostMode = GhostMode.Scatter;
+                        break;
+                    case GhostMode.Scatter:
+                        ghost.viewangle = ghost.viewangle.GetOppositeDirection();
+                        ghost.GhostMode = GhostMode.Chase;
+                        break;
+                }
+            }
 
-
-            if (TimeDuration(TotalFrightenedTime + firstScatter, firstChase))
-                ghost.GhostMode = GhostMode.Chase;
-            if(TimeDuration(TotalFrightenedTime + firstScatter + firstChase,secondScatter))
-                ghost.GhostMode = GhostMode.Scatter;
-            if (TimeDuration(TotalFrightenedTime + firstScatter + firstChase + secondScatter,secondChase))
-                ghost.GhostMode = GhostMode.Chase;
-            if(TimeDuration(TotalFrightenedTime + firstScatter + firstChase + secondScatter + secondChase,thirdScatter))
-                ghost.GhostMode = GhostMode.Scatter;
-            if (TimeDuration(TotalFrightenedTime + firstScatter + firstChase + secondScatter + secondChase + thirdScatter,thirdChase))
-                ghost.GhostMode = GhostMode.Chase;
-            if(TimeDuration(TotalFrightenedTime + firstScatter + firstChase + secondScatter + secondChase + thirdScatter + thirdChase,fourthScatter))
-                ghost.GhostMode = GhostMode.Scatter;
-            if(TimeDuration(TotalFrightenedTime + firstScatter + firstChase + secondScatter + secondChase + thirdScatter + thirdChase + fourthScatter,1))
-                ghost.GhostMode = GhostMode.Chase;
-            
-                
-
+            ModeDurationIndex++;
         }
         
-    }
-
-    private bool TimeDuration(int pastTime, int duration)
-    {
-        return DateTime.Now - GameStartTime > TimeSpan.FromSeconds(pastTime) &&
-               DateTime.Now - GameStartTime <= TimeSpan.FromSeconds(pastTime + duration);
     }
 }

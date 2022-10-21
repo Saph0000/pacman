@@ -15,7 +15,7 @@ public abstract class Ghost : GameActor
     {
         XPosition = xStartPosition;
         YPosition = yStartPosition;
-        GhostMode = GhostMode.Scatter;
+        GhostMode = GhostMode.Chase;
     }
 
     protected void GhostDecision(int targetXPosition, int targetYPosition)

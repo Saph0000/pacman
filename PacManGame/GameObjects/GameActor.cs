@@ -29,8 +29,9 @@ public abstract class GameActor : GameObject
         currFrame++;
         if (maxFrame == 0)
             maxFrame = images.Length;
-        if (currFrame >= maxFrame)
-            currFrame = 0;
+        if (currFrame < maxFrame) return;
+        currFrame = 0;
+        maxFrame = images.Length;
     }
     
     public void Move()

@@ -5,13 +5,6 @@ public class Pacman : GameActor
     public Pacman(IWorld world) : base(world,330, 465, 50, 50)
     {
         speed = 7;
-        //image = Image.FromFile(@"pictures\pacman.png");
-        /*
-        left = new[] { "pacman", "pacman_Left (1)", "pacman_Left (2)" };
-        right = new[] { "pacman", "pacman_Right (1)", "pacman_Right (2)" };
-        up = new[] { "pacman", "pacman_Up (1)", "pacman_Up (2)" };
-        down = new[]{ "pacman", "pacman_Down (1)", "pacman_Down (2)"};
-        */
     }
 
     public void CollectDots()
@@ -29,28 +22,24 @@ public class Pacman : GameActor
     {
         foreach (var powerPallet in World.PowerPallets)
         {
-            
-            if (viewangle != ViewAngle.None && WouldOverlap(powerPallet))
+            if (viewangle == ViewAngle.None || !WouldOverlap(powerPallet)) continue;
+            World.PowerPallets.Remove(powerPallet);
+            World.FrightenedStartTime = DateTime.Now;
+            World.NextModeChangeTime += 7;
+            //player.Score += 50;
+            foreach (var ghost in World.Ghosts.Where(ghost => ghost.GhostMode != GhostMode.Home))
             {
-                World.PowerPallets.Remove(powerPallet);
-                World.FrightenedStartTime = DateTime.Now;
-                World.TotalFrightenedTime += 7;
-                //player.Score += 50;
-                foreach (var ghost in World.Ghosts)
-                {
-                    if (ghost.GhostMode == GhostMode.Home) continue;
-                    ghost.GhostMode = GhostMode.Frightened;
-                    ghost.Frightened();
-                }
-                break;
+                ghost.GhostMode = GhostMode.Frightened;
+                ghost.Frightened();
             }
+            break;
         }
     }
 
     protected override string[] GetImageNames()
     {
         if (viewangle == ViewAngle.None)
-            return new[] { "pacman_None" };
+            return new[] { "pacman_None", "pacman_None", "pacman_None" };
         return new[] { "pacman_None", "pacman_" + viewangle + " (1)", "pacman_" + viewangle + " (2)" };
     }
 }

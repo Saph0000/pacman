@@ -23,4 +23,9 @@ public class Blinky : Ghost
         targetYPosition = 0;
         GhostDecision(targetXPosition, targetYPosition);
     }
+
+    public void ElroyMode()
+    {
+        speed += speed / 100 * 5;
+    }
 }
