@@ -62,4 +62,14 @@ public class Inky : Ghost
         targetYPosition = 850;
         GhostDecision(targetXPosition, targetYPosition);
     }
+
+    public override void ReleaseGhost()
+    {
+        if (World.PacDots.Count <= 210 && !IsReleased)
+        {
+            GhostMode = World.Blinky.GhostMode;
+            IsReleased = true;
+        }
+
+    }
 }

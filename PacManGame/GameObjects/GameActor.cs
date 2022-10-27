@@ -134,12 +134,12 @@ public abstract class GameActor : GameObject
         return false;
     }
 
-    protected List<ViewAngle> CheckDirection(ViewAngle currentViewAngle)
+    protected List<ViewAngle> CheckDirection(ViewAngle currentViewAngle, GhostMode GhostMode)
     {
         var possibleDirections = new List<ViewAngle>();
         if (!WouldHitWall(ViewAngle.Up) && currentViewAngle != ViewAngle.Down)
             possibleDirections.Add(ViewAngle.Up);
-        if(!WouldHitWall(ViewAngle.Down) && currentViewAngle != ViewAngle.Up)
+        if(!WouldHitWall(ViewAngle.Down) && currentViewAngle != ViewAngle.Up && !(XPosition == 325 && YPosition == 315 &&  GhostMode != GhostMode.Home))
             possibleDirections.Add(ViewAngle.Down);
         if (!WouldHitWall(ViewAngle.Right) && currentViewAngle != ViewAngle.Left)
             possibleDirections.Add(ViewAngle.Right);

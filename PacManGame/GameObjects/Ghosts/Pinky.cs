@@ -42,4 +42,13 @@ public class Pinky : Ghost
         targetYPosition = 0;
         GhostDecision(targetXPosition, targetYPosition);
     }
+    
+    public override void ReleaseGhost()
+    {
+        if (!IsReleased)
+        {
+            GhostMode = World.Blinky.GhostMode;
+            IsReleased = true;
+        }
+    }
 }

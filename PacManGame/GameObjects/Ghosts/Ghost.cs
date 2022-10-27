@@ -10,19 +10,21 @@ public abstract class Ghost : GameActor
     protected int currentSpeed;
     
     public GhostMode GhostMode { get; set; }
-    
+    public bool IsReleased { get; set; }
+
     protected Ghost(IWorld world, int xStartPosition, int yStartPosition, int width, int height) : base(world, xStartPosition, yStartPosition, width, height)
     {
         XPosition = xStartPosition;
         YPosition = yStartPosition;
-        GhostMode = GhostMode.Chase;
+        GhostMode = GhostMode.Off;
+        IsReleased = false;
     }
 
     protected void GhostDecision(int targetXPosition, int targetYPosition)
     {
         var minDistance = double.PositiveInfinity;
         var minDistanceViewAngle = ViewAngle.None;
-        foreach (var viewAngle in CheckDirection(viewangle))
+        foreach (var viewAngle in CheckDirection(viewangle, GhostMode))
         {
             var distance = viewAngle switch
             {
@@ -49,9 +51,10 @@ public abstract class Ghost : GameActor
             GhostMode = GhostMode.Chase;
         }
 
+
         maxFrame = DateTime.Now - World.FrightenedStartTime <= TimeSpan.FromSeconds(4) ? 2 : 0;
         speed /= 2;
-        var possibleDirections = CheckDirection(viewangle);
+        var possibleDirections = CheckDirection(viewangle, GhostMode);
         viewangle = possibleDirections.Any() ? possibleDirections[Random.Next(0, possibleDirections.Count)] : ViewAngle.None;
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
@@ -78,7 +81,7 @@ public abstract class Ghost : GameActor
                 Home();
                 break;
             case GhostMode.Off:
-            default:
+                
                 break;
         }
     }
@@ -115,5 +118,34 @@ public abstract class Ghost : GameActor
     public override void Die()
     {
         GhostMode = GhostMode.Home;
+    }
+
+    public virtual void ReleaseGhost()
+    {
+    }
+    public virtual void GhostModeTimer(params int[] modeDurations)
+    {
+        if (DateTime.Now - World.GameStartTime < TimeSpan.FromSeconds(World.NextModeChangeTime)) return;
+        World.NextModeChangeTime += modeDurations[World.ModeDurationIndex];
+        switch (World.CurrentGhostMode)
+        {
+            case GhostMode.Chase:
+                World.CurrentGhostMode = GhostMode.Scatter;
+                break;
+            case GhostMode.Scatter:
+                World.CurrentGhostMode = GhostMode.Chase;
+                break;
+        }
+        foreach (var ghost in World.Ghosts)
+        {
+            if (ghost.GhostMode == GhostMode.Off) continue;
+            
+            ghost.viewangle = ghost.viewangle.GetOppositeDirection();
+            ghost.GhostMode = World.CurrentGhostMode;
+
+        }
+
+        World.ModeDurationIndex++;
+
     }
 }

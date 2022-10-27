@@ -2,7 +2,7 @@
 
 public class Blinky : Ghost
 {
-    public Blinky(IWorld world) : base(world,325, 375, 50, 50)
+    public Blinky(IWorld world) : base(world,325, 315, 50, 50)
     {
         speed = 2;
         currentSpeed = speed;
@@ -27,5 +27,14 @@ public class Blinky : Ghost
     public void ElroyMode()
     {
         speed += speed / 100 * 5;
+    }
+    
+    public override void ReleaseGhost()
+    {
+        if (!IsReleased)
+        {
+            GhostMode = GhostMode.Scatter;
+            IsReleased = true;
+        }
     }
 }

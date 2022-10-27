@@ -12,6 +12,10 @@ public interface IWorld
     Pacman Pacman { get; }
     Blinky Blinky {  get; }
     DateTime FrightenedStartTime { get; set; }
+    DateTime GameStartTime { get; set; }
     public IDictionary<string, Image> ImageMap { get; }
     public int NextModeChangeTime { get; set; }
+    public int ModeDurationIndex { get; set; }
+
+    public GhostMode CurrentGhostMode { get; set; }
 }

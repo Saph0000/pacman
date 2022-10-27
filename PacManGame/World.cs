@@ -1,4 +1,5 @@
-﻿using PacManGame.GameObjects;
+﻿using System.Drawing.Text;
+using PacManGame.GameObjects;
 using PacManGame.GameObjects.Ghosts;
 using Timer = System.Threading.Timer;
 
@@ -24,6 +25,7 @@ public sealed class World : IWorld
         };
         ImageMap = Directory.GetFiles("Pictures", "*.png")
             .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
+        
 
         GameStartTime = DateTime.Now;
         ModeDurationIndex = 0;
@@ -41,8 +43,9 @@ public sealed class World : IWorld
     public List<Ghost> Ghosts { get; }
     public IDictionary<string, Image> ImageMap { get; }
     public int NextModeChangeTime { get; set; }
-    private int ModeDurationIndex { get; set; }
+    public int ModeDurationIndex { get; set; }
     private int ElroyModeCounter { get; }
+    public GhostMode CurrentGhostMode { get; set; }
     
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -52,21 +55,36 @@ public sealed class World : IWorld
             wall.Draw(eventArgs);
         foreach (var powerPallet in PowerPallets)
             powerPallet.Draw(eventArgs);
+        
+        
+        PrivateFontCollection collection = new PrivateFontCollection();
+        collection.AddFontFile(@"Fonts\ARCADECLASSIC.TTF");
+        var fontFamily = new FontFamily("ArcadeClassic", collection);
+        var font = new Font(fontFamily, 32, FontStyle.Regular, GraphicsUnit.Pixel);
+
+        int i = 80;
         foreach (var ghost in Ghosts)
         {
             ghost.Draw(eventArgs);
-            eventArgs.Graphics.FillEllipse(Brushes.Coral, ghost.targetXPosition, ghost.targetYPosition, 10, 10);
-
+            eventArgs.Graphics.FillEllipse(Brushes.Blue, ghost.targetXPosition, ghost.targetYPosition, 10, 10);
+            eventArgs.Graphics.DrawString(ghost.GhostMode.ToString(), font, Brushes.Chartreuse, i, 10);
+            i += 180;
         }
 
         Pacman.Draw(eventArgs);
+        eventArgs.Graphics.DrawString(PacDots.Count.ToString(),font, Brushes.Chartreuse, 10,10);
+        
 
     }
 
     public void Tick()
     {
-        if(ModeDurationIndex <= 7)
-            GhostModeTimer(7, 20, 7, 20, 5, 20, 5, 20);
+        if (PacDots.Count == 0)  return;
+        foreach (var ghost in Ghosts)
+        {
+            if(ModeDurationIndex <= 7)
+                ghost.GhostModeTimer(7, 20, 7, 20, 5, 20, 5, 20);
+        }
 
         if (PacDots.Count == ElroyModeCounter)
         {
@@ -81,6 +99,8 @@ public sealed class World : IWorld
                 //score += kumulierender Wert.
                 ghost.Die();
             }
+            if (Pacman.WouldOverlap(ghost))
+                Pacman.Die();
         }
 
 
@@ -97,6 +117,7 @@ public sealed class World : IWorld
         {
             ghost.SetToNextTurn();
             ghost.CheckGhostMode();
+            ghost.ReleaseGhost();
         }
 
         Pacman.CollectDots();
@@ -119,29 +140,5 @@ public sealed class World : IWorld
         }
     }
 
-    private void GhostModeTimer(params int[] modeDurations)
-    {
-
-        if (DateTime.Now - GameStartTime >= TimeSpan.FromSeconds(NextModeChangeTime))
-        {
-            NextModeChangeTime += modeDurations[ModeDurationIndex];
-            foreach (var ghost in Ghosts)
-            {
-                switch (ghost.GhostMode)
-                {
-                    case GhostMode.Chase:
-                        ghost.viewangle = ghost.viewangle.GetOppositeDirection();
-                        ghost.GhostMode = GhostMode.Scatter;
-                        break;
-                    case GhostMode.Scatter:
-                        ghost.viewangle = ghost.viewangle.GetOppositeDirection();
-                        ghost.GhostMode = GhostMode.Chase;
-                        break;
-                }
-            }
-
-            ModeDurationIndex++;
-        }
-        
-    }
+  
 }

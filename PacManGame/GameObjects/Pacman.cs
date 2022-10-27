@@ -16,20 +16,26 @@ public class Pacman : GameActor
             //player.Score += 10;
             break;
         }
+
+        if (!World.PacDots.Any())
+        {
+            //You cleared the level!!!
+        }
+
     }
 
     public void CollectPowerPallets()
     {
-        foreach (var powerPallet in World.PowerPallets)
+        foreach (var powerPallet in World.PowerPallets.Where(powerPallet => viewangle != ViewAngle.None && WouldOverlap(powerPallet)))
         {
-            if (viewangle == ViewAngle.None || !WouldOverlap(powerPallet)) continue;
             World.PowerPallets.Remove(powerPallet);
             World.FrightenedStartTime = DateTime.Now;
             World.NextModeChangeTime += 7;
             //player.Score += 50;
-            foreach (var ghost in World.Ghosts.Where(ghost => ghost.GhostMode != GhostMode.Home))
+            foreach (var ghost in World.Ghosts.Where(ghost => ghost.GhostMode != GhostMode.Home && ghost.GhostMode != GhostMode.Off))
             {
                 ghost.GhostMode = GhostMode.Frightened;
+                ghost.viewangle = ghost.viewangle.GetOppositeDirection();
                 ghost.Frightened();
             }
             break;
@@ -41,5 +47,12 @@ public class Pacman : GameActor
         if (viewangle == ViewAngle.None)
             return new[] { "pacman_None", "pacman_None", "pacman_None" };
         return new[] { "pacman_None", "pacman_" + viewangle + " (1)", "pacman_" + viewangle + " (2)" };
+    }
+
+    public void Die()
+    {
+        //lives--;
+        //if (lives = 4)
+        //    Loose = true;
     }
 }
