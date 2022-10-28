@@ -20,7 +20,6 @@ public abstract class GameActor : GameObject
         World = world;
         XPosition = xStartPosition;
         YPosition = yStartPosition;
-        
     }
 
     public void AnimateActor()

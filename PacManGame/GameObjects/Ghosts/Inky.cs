@@ -67,7 +67,7 @@ public class Inky : Ghost
     {
         if (World.PacDots.Count <= 210 && !IsReleased)
         {
-            GhostMode = World.Blinky.GhostMode;
+            GhostMode = World.CurrentGhostMode;
             IsReleased = true;
         }
 

@@ -2,10 +2,17 @@
 
 public class Player
 {
-    private int points;
 
+    public Player()
+    {
+        Score = 0;
+        Life = 3;
+        Lose = false;
+    }
 
   public int Life { get; set; }
 
   public long Score { get; set; }
+  
+  public bool Lose { get; set; }
 }

@@ -12,27 +12,13 @@ public class Pinky : Ghost
 
     protected override void Chase(Pacman pacman, Ghost blinky)
     {
-        switch (pacman.viewangle)
+        (targetXPosition, targetYPosition) = pacman.viewangle switch
         {
-            case ViewAngle.Right:
-            case ViewAngle.None:
-                targetXPosition = pacman.XPosition + 100;
-                targetYPosition = pacman.YPosition;
-                break;
-            case ViewAngle.Left:
-                targetXPosition = pacman.XPosition - 100;
-                targetYPosition = pacman.YPosition;
-                break;
-            case ViewAngle.Down:
-                targetXPosition = pacman.XPosition;
-                targetYPosition = pacman.YPosition + 100;
-                break;
-            case ViewAngle.Up:
-                targetXPosition = pacman.XPosition - 100;
-                targetYPosition = pacman.YPosition - 100;
-                break;
-        }
-        
+            ViewAngle.Left => (pacman.XPosition - 100, pacman.YPosition),
+            ViewAngle.Down => (pacman.XPosition, pacman.YPosition + 100),
+            ViewAngle.Up => (pacman.XPosition - 100, pacman.YPosition - 100),
+            ViewAngle.Right or ViewAngle.None or _ => (pacman.XPosition + 100, pacman.YPosition),
+        };
         GhostDecision(targetXPosition, targetYPosition);
     }
 
@@ -45,10 +31,8 @@ public class Pinky : Ghost
     
     public override void ReleaseGhost()
     {
-        if (!IsReleased)
-        {
-            GhostMode = World.Blinky.GhostMode;
-            IsReleased = true;
-        }
+        if (IsReleased) return;
+        GhostMode = World.CurrentGhostMode;
+        IsReleased = true;
     }
 }

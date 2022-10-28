@@ -23,6 +23,7 @@ public sealed class World : IWorld
             new Pinky(this),
             new Clyde(this)
         };
+        Player = new Player();
         ImageMap = Directory.GetFiles("Pictures", "*.png")
             .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
         
@@ -36,6 +37,7 @@ public sealed class World : IWorld
     public List<PacDot> PacDots { get; }
     public List<PowerPallet> PowerPallets { get; }
     public List<Wall> Walls { get; }
+    public Player Player { get; set; }
     public Pacman Pacman { get; }
     public Blinky Blinky { get; }
     public DateTime FrightenedStartTime { get; set; }
@@ -46,6 +48,7 @@ public sealed class World : IWorld
     public int ModeDurationIndex { get; set; }
     private int ElroyModeCounter { get; }
     public GhostMode CurrentGhostMode { get; set; }
+    public int eatenGhosts { get; set; }
     
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -62,24 +65,20 @@ public sealed class World : IWorld
         var fontFamily = new FontFamily("ArcadeClassic", collection);
         var font = new Font(fontFamily, 32, FontStyle.Regular, GraphicsUnit.Pixel);
 
-        int i = 80;
         foreach (var ghost in Ghosts)
         {
             ghost.Draw(eventArgs);
-            eventArgs.Graphics.FillEllipse(Brushes.Blue, ghost.targetXPosition, ghost.targetYPosition, 10, 10);
-            eventArgs.Graphics.DrawString(ghost.GhostMode.ToString(), font, Brushes.Chartreuse, i, 10);
-            i += 180;
         }
 
         Pacman.Draw(eventArgs);
-        eventArgs.Graphics.DrawString(PacDots.Count.ToString(),font, Brushes.Chartreuse, 10,10);
+        eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 10,10);
+        eventArgs.Graphics.DrawString(Player.Life.ToString(), font, Brushes.White, 100,10);
         
-
     }
 
     public void Tick()
     {
-        if (PacDots.Count == 0)  return;
+        if (PacDots.Count == 0 || Player.Lose)  return;
         foreach (var ghost in Ghosts)
         {
             if(ModeDurationIndex <= 7)
@@ -91,15 +90,36 @@ public sealed class World : IWorld
             Blinky.ElroyMode();
         }
 
-        foreach (var ghost in Ghosts.Where(ghost => ghost.GhostMode == GhostMode.Frightened))
+        foreach (var ghost in Ghosts)
         {
 
-            if (ghost.WouldOverlap(Pacman))
+            if (ghost.WouldOverlap(Pacman) && ghost.GhostMode == GhostMode.Frightened)
             {
+                switch (eatenGhosts)
+                {
+                    case 0 :
+                        Player.Score += 200;
+                        eatenGhosts += 1;
+                        break;
+                    case 1:
+                        Player.Score += 400;
+                        eatenGhosts += 1;
+                        break;
+                    case 2:
+                        Player.Score += 800;
+                        eatenGhosts += 1;
+                        break;
+                    case 3:
+                        Player.Score += 1600;
+                        eatenGhosts += 1;
+                        break;
+                        
+                }
                 //score += kumulierender Wert.
                 ghost.Die();
+                
             }
-            if (Pacman.WouldOverlap(ghost))
+            if (Pacman.WouldOverlap(ghost) && !(ghost.GhostMode is GhostMode.Frightened or GhostMode.Home))
                 Pacman.Die();
         }
 

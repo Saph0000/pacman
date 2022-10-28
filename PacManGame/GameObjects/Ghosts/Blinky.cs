@@ -33,7 +33,7 @@ public class Blinky : Ghost
     {
         if (!IsReleased)
         {
-            GhostMode = GhostMode.Scatter;
+            GhostMode = World.CurrentGhostMode;
             IsReleased = true;
         }
     }

@@ -38,7 +38,7 @@ public class Clyde : Ghost
     {
         if (World.PacDots.Count <= 150 && !IsReleased)
         {
-            GhostMode = World.Blinky.GhostMode;
+            GhostMode = World.CurrentGhostMode;
             IsReleased = true;
         }
 

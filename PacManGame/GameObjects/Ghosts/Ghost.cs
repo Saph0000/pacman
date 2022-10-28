@@ -89,8 +89,8 @@ public abstract class Ghost : GameActor
     private void Home()
     {
         speed = 8;
-        targetXPosition = xStartPosition;
-        targetYPosition = yStartPosition;
+        targetXPosition = 325;
+        targetYPosition = 375;
         GhostDecision(targetXPosition, targetYPosition);
         if (XPosition == targetXPosition && YPosition == targetYPosition)
         {
