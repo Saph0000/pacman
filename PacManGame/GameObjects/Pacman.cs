@@ -4,7 +4,7 @@ public class Pacman : GameActor
 {
     //private HitBox HitBox;
     
-    public Pacman(IWorld world) : base(world,330, 465, 50, 50)
+    public Pacman(IWorld world) : base(world,325, 615, 50, 50)
     {
         speed = 3;
         //HitBox = new HitBox(2);
@@ -12,9 +12,9 @@ public class Pacman : GameActor
 
     public HitBox HitBox => new(this, 15);
 
-    public void CollectDots()
+    public void CollectPacDots()
     {
-        foreach (var dot in World.PacDots)
+        foreach (var dot in World.PacDots )
         {
             if (viewangle == ViewAngle.None || !HitBox.WouldOverlap(dot)) continue;
             World.PacDots.Remove(dot);
@@ -28,6 +28,26 @@ public class Pacman : GameActor
         }
 
     }
+
+    public void CollectFruits()
+    {
+        foreach (var fruit in World.Fruits)
+        {
+            if (viewangle == ViewAngle.None || !HitBox.WouldOverlap(fruit) || (World.PacDots.Count >= 170)) continue;
+            World.Fruits.Remove(fruit);
+            World.Player.Score += 100;
+            break;
+        }
+    }
+    /*
+    public void CollectDots()
+    {
+        foreach (var dot in World.PacDots)
+        {
+            if (viewangle == ViewAngle.None || !HitBox.WouldOverlap(dot)) continue;
+            World.PacDots.Remove(dot);
+            World.Player.Score += 10;
+            break;*/
 
     public void CollectPowerPallets()
     {

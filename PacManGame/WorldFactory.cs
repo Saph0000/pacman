@@ -14,6 +14,9 @@ public static class WorldFactory
     public static List<PowerPallet> CreatePowerPallets(IWorld world) =>
         CreateObjects<PowerPallet>(world, "PowerPallets");
     
+    public static List<Fruit> CreateFruits(IWorld world) =>
+        CreateObjects<Fruit>(world, "Fruits");
+    
     private static List<TGameObject> CreateObjects<TGameObject>(IWorld world, string fileName)
         where TGameObject : GameObject
     {

@@ -14,6 +14,7 @@ public sealed class World : IWorld
         PacDots = WorldFactory.CreatePacDots(this);
         PowerPallets = WorldFactory.CreatePowerPallets(this);
         Walls = WorldFactory.CreateWalls(this);
+        Fruits = WorldFactory.CreateFruits(this);
         Pacman = new Pacman(this);
         Blinky = new Blinky(this);
         Ghosts = new List<Ghost>
@@ -37,8 +38,10 @@ public sealed class World : IWorld
     public List<PacDot> PacDots { get; }
     public List<PowerPallet> PowerPallets { get; }
     public List<Wall> Walls { get; }
+    public List<Fruit> Fruits { get; }
     public Player Player { get; set; }
     public Pacman Pacman { get; }
+    public Fruit Fruit { get; }
     public Blinky Blinky { get; }
     public DateTime FrightenedStartTime { get; set; }
     public DateTime GameStartTime { get; set; }
@@ -58,6 +61,9 @@ public sealed class World : IWorld
             wall.Draw(eventArgs);
         foreach (var powerPallet in PowerPallets)
             powerPallet.Draw(eventArgs);
+        if(PacDots.Count <= 170)
+            foreach (var fruit in Fruits)
+                fruit.Draw(eventArgs);
         
         
         PrivateFontCollection collection = new PrivateFontCollection();
@@ -93,7 +99,7 @@ public sealed class World : IWorld
         foreach (var ghost in Ghosts)
         {
 
-            if (ghost.WouldOverlap(Pacman) && ghost.GhostMode == GhostMode.Frightened)
+            if (ghost.WouldOverlap(Pacman.HitBox) && ghost.GhostMode == GhostMode.Frightened)
             {
                 switch (eatenGhosts)
                 {
@@ -115,11 +121,10 @@ public sealed class World : IWorld
                         break;
                         
                 }
-                //score += kumulierender Wert.
                 ghost.Die();
                 
             }
-            if (Pacman.WouldOverlap(ghost) && !(ghost.GhostMode is GhostMode.Frightened or GhostMode.Home))
+            if (Pacman.HitBox.WouldOverlap(ghost) && !(ghost.GhostMode is GhostMode.Frightened or GhostMode.Home))
                 Pacman.Die();
         }
 
@@ -140,7 +145,8 @@ public sealed class World : IWorld
             ghost.ReleaseGhost();
         }
 
-        Pacman.CollectDots();
+        Pacman.CollectPacDots();
+        Pacman.CollectFruits();
         Pacman.CollectPowerPallets();
 
         frame++;

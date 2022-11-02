@@ -7,6 +7,7 @@ public abstract class GameObject
     public int YPosition { get; set; }
     public int Width { get; init; }
     public int Height { get; init; }
+    public string FruitImage { get; set; }
     
     protected bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus = 0, int yPlus = 0) =>
         viewAngle switch
