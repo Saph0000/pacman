@@ -80,6 +80,10 @@ public sealed class World : IWorld
         eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 10,10);
         eventArgs.Graphics.DrawString(Player.Life.ToString(), font, Brushes.White, 100,10);
         
+        if (Player.Lose)
+        {
+            eventArgs.Graphics.DrawString("GameOver", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 205,310);
+        }
     }
 
     public void Tick()
