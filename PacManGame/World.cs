@@ -1,7 +1,6 @@
 ﻿using System.Drawing.Text;
 using PacManGame.GameObjects;
 using PacManGame.GameObjects.Ghosts;
-using Timer = System.Threading.Timer;
 
 namespace PacManGame;
 
@@ -29,7 +28,7 @@ public sealed class World : IWorld
             .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
         
 
-        GameStartTime = DateTime.Now;
+        GameStartTime = DateTime.Now + TimeSpan.FromSeconds(5);
         ModeDurationIndex = 0;
         NextModeChangeTime = 0;
         ElroyModeCounter = 20;
@@ -71,29 +70,44 @@ public sealed class World : IWorld
         var fontFamily = new FontFamily("ArcadeClassic", collection);
         var font = new Font(fontFamily, 32, FontStyle.Regular, GraphicsUnit.Pixel);
 
-        foreach (var ghost in Ghosts)
+        foreach (var ghost in Ghosts.Where(g => g.GhostMode != GhostMode.Off))
         {
             ghost.Draw(eventArgs);
         }
 
         Pacman.Draw(eventArgs);
+        if (Player.Life >= 1)
+            Pacman.Draw(eventArgs, 50, 850);
+        if (Player.Life >= 2)
+            Pacman.Draw(eventArgs, 105, 850);
+        if (Player.Life >= 3)
+            Pacman.Draw(eventArgs, 160, 850);
+        
         eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 10,10);
-        eventArgs.Graphics.DrawString(Player.Life.ToString(), font, Brushes.White, 100,10);
+        //eventArgs.Graphics.DrawString(eatenGhosts.ToString(), font, Brushes.White, 100,10);
         
         if (Player.Lose)
         {
             eventArgs.Graphics.DrawString("GameOver", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 205,310);
         }
+
+        if (GameStartTime >= DateTime.Now)
+        {
+            eventArgs.Graphics.DrawString("Player", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 240,310);
+            eventArgs.Graphics.DrawString("Ready!", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 240,460);
+        }
+
+        if (PacDots.Count > 150)
+            Ghosts.FirstOrDefault(g => g.GetType() == typeof(Clyde))?.Draw(eventArgs, 275,375);
+        if (PacDots.Count > 210)
+            Ghosts.FirstOrDefault(g => g.GetType() == typeof(Inky))?.Draw(eventArgs, 375,375);
+        if(GameStartTime >= DateTime.Now)
+            Ghosts.FirstOrDefault(g => g.GetType() == typeof(Pinky))?.Draw(eventArgs, 325,375);
     }
 
     public void Tick()
     {
-        if (PacDots.Count == 0 || Player.Lose)  return;
-        foreach (var ghost in Ghosts)
-        {
-            if(ModeDurationIndex <= 7)
-                ghost.GhostModeTimer(7, 20, 7, 20, 5, 20, 5, 20);
-        }
+        if (PacDots.Count == 0 || Player.Lose || GameStartTime >= DateTime.Now)  return;
 
         if (PacDots.Count == ElroyModeCounter)
         {
@@ -102,33 +116,16 @@ public sealed class World : IWorld
 
         foreach (var ghost in Ghosts)
         {
-
+            ghost.SetToNextTurn();
+            ghost.CheckGhostMode();
+            ghost.ReleaseGhost();
+            
+            if(ModeDurationIndex <= 7)
+                ghost.GhostModeTimer(7, 20, 7, 20, 5, 20, 5, 20);
+            
             if (ghost.WouldOverlap(Pacman.HitBox) && ghost.GhostMode == GhostMode.Frightened)
-            {
-                switch (eatenGhosts)
-                {
-                    case 0 :
-                        Player.Score += 200;
-                        eatenGhosts += 1;
-                        break;
-                    case 1:
-                        Player.Score += 400;
-                        eatenGhosts += 1;
-                        break;
-                    case 2:
-                        Player.Score += 800;
-                        eatenGhosts += 1;
-                        break;
-                    case 3:
-                        Player.Score += 1600;
-                        eatenGhosts += 1;
-                        break;
-                        
-                }
                 ghost.Die();
-                
-            }
-            if (Pacman.HitBox.WouldOverlap(ghost) && !(ghost.GhostMode is GhostMode.Frightened or GhostMode.Home))
+            if (Pacman.HitBox.WouldOverlap(ghost) && ghost.GhostMode is not (GhostMode.Frightened or GhostMode.Home))
                 Pacman.Die();
         }
 
@@ -142,12 +139,7 @@ public sealed class World : IWorld
 
         if (!Pacman.WouldHitWall(Pacman.viewangle))
             Pacman.Move();
-        foreach (var ghost in Ghosts)
-        {
-            ghost.SetToNextTurn();
-            ghost.CheckGhostMode();
-            ghost.ReleaseGhost();
-        }
+        
 
         Pacman.CollectPacDots();
         Pacman.CollectFruits();

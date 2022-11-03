@@ -11,7 +11,13 @@ public class Player
     }
 
   public int Life { get; set; }
-
+  
+  public long AddedScore 
+  { 
+      get;
+      set; 
+  }
+  
   public long Score { get; set; }
   
   public bool Lose { get; set; }

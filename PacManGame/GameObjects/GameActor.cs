@@ -208,8 +208,13 @@ public abstract class GameActor : GameObject
        
     }
     
-    public override void Draw(PaintEventArgs e)
+    public void Draw(PaintEventArgs e, int XPosition = 0,int YPosition = 0 )
     {
+        if (XPosition == 0)
+            XPosition = this.XPosition;
+        if (YPosition == 0)
+            YPosition = this.YPosition;
+        
         var imageNames = GetImageNames();
         var imageName = currFrame >= imageNames.Length ? imageNames[0] : imageNames[currFrame];
         if (!World.ImageMap.ContainsKey(imageName)) 

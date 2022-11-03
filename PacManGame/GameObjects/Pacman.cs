@@ -39,15 +39,6 @@ public class Pacman : GameActor
             break;
         }
     }
-    /*
-    public void CollectDots()
-    {
-        foreach (var dot in World.PacDots)
-        {
-            if (viewangle == ViewAngle.None || !HitBox.WouldOverlap(dot)) continue;
-            World.PacDots.Remove(dot);
-            World.Player.Score += 10;
-            break;*/
 
     public void CollectPowerPallets()
     {
@@ -80,8 +71,8 @@ public class Pacman : GameActor
         World.Player.Life--;
         if (World.Player.Life == 0)
             World.Player.Lose = true;
-        XPosition = 330;
-        YPosition = 465;
+        XPosition = 325;
+        YPosition = 615;
         foreach (var ghost in World.Ghosts)
         {
             ghost.XPosition = 325;

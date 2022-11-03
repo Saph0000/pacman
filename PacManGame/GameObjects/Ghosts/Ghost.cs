@@ -118,6 +118,26 @@ public abstract class Ghost : GameActor
     public override void Die()
     {
         GhostMode = GhostMode.Home;
+        switch (World.eatenGhosts)
+        {
+            case 0 :
+                World.Player.Score += 200;
+                World.eatenGhosts += 1;
+                break;
+            case 1:
+                World.Player.Score += 400;
+                World.eatenGhosts += 1;
+                break;
+            case 2:
+                World.Player.Score += 800;
+                World.eatenGhosts += 1;
+                break;
+            case 3:
+                World.Player.Score += 1600;
+                World.eatenGhosts += 1;
+                break;
+                        
+        }
     }
 
     public virtual void ReleaseGhost()
