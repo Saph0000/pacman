@@ -1,4 +1,5 @@
 ﻿using static PacManGame.Helper.Maths;
+using Timer = System.Threading.Timer;
 
 namespace PacManGame.GameObjects.Ghosts;
 
@@ -8,6 +9,11 @@ public abstract class Ghost : GameActor
     public int targetXPosition;
     public int targetYPosition;
     protected int currentSpeed;
+    public int currentXPosition;
+    public int currentYPosition;
+    public int eatenGhostPoints;
+    public DateTime deathTimer;
+    
     
     public GhostMode GhostMode { get; set; }
     public bool IsReleased { get; set; }
@@ -117,27 +123,31 @@ public abstract class Ghost : GameActor
 
     public override void Die()
     {
+        currentXPosition = XPosition;
+        currentYPosition = YPosition;
         GhostMode = GhostMode.Home;
         switch (World.eatenGhosts)
         {
             case 0 :
-                World.Player.Score += 200;
+                eatenGhostPoints = 200;
                 World.eatenGhosts += 1;
                 break;
             case 1:
-                World.Player.Score += 400;
+                eatenGhostPoints = 400;
                 World.eatenGhosts += 1;
                 break;
             case 2:
-                World.Player.Score += 800;
+                eatenGhostPoints = 800;
                 World.eatenGhosts += 1;
                 break;
             case 3:
-                World.Player.Score += 1600;
+                eatenGhostPoints = 1600;
                 World.eatenGhosts += 1;
                 break;
                         
         }
+
+        World.Player.Score += eatenGhostPoints;
     }
 
     public virtual void ReleaseGhost()

@@ -3,9 +3,9 @@
 public class Inky : Ghost
 {
    
-    public Inky(IWorld world) : base(world,325, 375, 50, 50)
+    public Inky(IWorld world, int speed) : base(world,325, 375, 50, 50)
     {
-        speed = 2;
+        this.speed = speed;
         currentSpeed = speed;
     }
 

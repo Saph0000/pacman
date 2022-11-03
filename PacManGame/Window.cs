@@ -37,12 +37,14 @@ public class Window : Form
 
     private void TimerTick(object sender, EventArgs e)
     {
-        world.Tick();
         Invalidate();
     }
 
-    protected override void OnPaint(PaintEventArgs e) => 
+    protected override void OnPaint(PaintEventArgs e)
+    {
         world.Draw(e);
+        world.Tick(e);
+    }
 
     private void HandleInput(object sender, KeyEventArgs e)
     {

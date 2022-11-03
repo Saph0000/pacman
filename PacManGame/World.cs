@@ -10,47 +10,55 @@ public sealed class World : IWorld
 
     public World()
     {
-        PacDots = WorldFactory.CreatePacDots(this);
-        PowerPallets = WorldFactory.CreatePowerPallets(this);
         Walls = WorldFactory.CreateWalls(this);
-        Fruits = WorldFactory.CreateFruits(this);
-        Pacman = new Pacman(this);
-        Blinky = new Blinky(this);
-        Ghosts = new List<Ghost>
-        {
-            Blinky,
-            new Inky(this),
-            new Pinky(this),
-            new Clyde(this)
-        };
         Player = new Player();
         ImageMap = Directory.GetFiles("Pictures", "*.png")
             .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
+        Level = 1;
+        LoadLevel();
         
+    }
+
+    public List<PacDot> PacDots { get; set; }
+    public List<PowerPallet> PowerPallets { get; set; }
+    public List<Wall> Walls { get; }
+    public List<Fruit> Fruits { get; set; }
+    public Player Player { get; set; }
+    public Pacman Pacman { get; set; }
+    public Blinky Blinky { get; set; }
+    public DateTime FrightenedStartTime { get; set; }
+    public DateTime GameStartTime { get; set; }
+    public List<Ghost> Ghosts { get; set; }
+    public IDictionary<string, Image> ImageMap { get; }
+    public int NextModeChangeTime { get; set; }
+    public int ModeDurationIndex { get; set; }
+    private int ElroyModeCounter { get; set; }
+    public GhostMode CurrentGhostMode { get; set; }
+    public int eatenGhosts { get; set; }
+    public int Level { get; set; }
+    public int[] GhostModeTime { get; set; }
+
+    public void LoadLevel()
+    {
+        PacDots = WorldFactory.CreatePacDots(this);
+        PowerPallets = WorldFactory.CreatePowerPallets(this);
+        Fruits = WorldFactory.CreateFruits(this);
+        Pacman = new Pacman(this, 4);
+        Blinky = new Blinky(this, 2);
+        Ghosts = new List<Ghost>
+        {
+            Blinky,
+            new Inky(this, 2),
+            new Pinky(this, 2),
+            new Clyde(this, 2)
+        };
 
         GameStartTime = DateTime.Now + TimeSpan.FromSeconds(5);
         ModeDurationIndex = 0;
         NextModeChangeTime = 0;
         ElroyModeCounter = 20;
+        GhostModeTime = new []{7,20,7,20,5,20,5,20};
     }
-
-    public List<PacDot> PacDots { get; }
-    public List<PowerPallet> PowerPallets { get; }
-    public List<Wall> Walls { get; }
-    public List<Fruit> Fruits { get; }
-    public Player Player { get; set; }
-    public Pacman Pacman { get; }
-    public Fruit Fruit { get; }
-    public Blinky Blinky { get; }
-    public DateTime FrightenedStartTime { get; set; }
-    public DateTime GameStartTime { get; set; }
-    public List<Ghost> Ghosts { get; }
-    public IDictionary<string, Image> ImageMap { get; }
-    public int NextModeChangeTime { get; set; }
-    public int ModeDurationIndex { get; set; }
-    private int ElroyModeCounter { get; }
-    public GhostMode CurrentGhostMode { get; set; }
-    public int eatenGhosts { get; set; }
     
     public void Draw(PaintEventArgs eventArgs)
     {
@@ -84,6 +92,7 @@ public sealed class World : IWorld
             Pacman.Draw(eventArgs, 160, 850);
         
         eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 10,10);
+        eventArgs.Graphics.DrawString(Level.ToString(), font, Brushes.White, 100,10);
         //eventArgs.Graphics.DrawString(eatenGhosts.ToString(), font, Brushes.White, 100,10);
         
         if (Player.Lose)
@@ -97,17 +106,40 @@ public sealed class World : IWorld
             eventArgs.Graphics.DrawString("Ready!", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 240,460);
         }
 
-        if (PacDots.Count > 150)
-            Ghosts.FirstOrDefault(g => g.GetType() == typeof(Clyde))?.Draw(eventArgs, 275,375);
-        if (PacDots.Count > 210)
-            Ghosts.FirstOrDefault(g => g.GetType() == typeof(Inky))?.Draw(eventArgs, 375,375);
-        if(GameStartTime >= DateTime.Now)
-            Ghosts.FirstOrDefault(g => g.GetType() == typeof(Pinky))?.Draw(eventArgs, 325,375);
+        foreach (var ghost in Ghosts)
+        {
+            if (!ghost.IsReleased)
+            {
+                if (ghost.GetType() == typeof(Clyde))
+                {
+                    ghost.Draw(eventArgs, 275,375);
+                }
+                if (ghost.GetType() == typeof(Inky))
+                {
+                    ghost.Draw(eventArgs, 375,375);
+                }
+                if (ghost.GetType() == typeof(Pinky))
+                {
+                    ghost.Draw(eventArgs, 325,375);
+                }
+                
+            }
+        }
     }
 
-    public void Tick()
+    public void Tick(PaintEventArgs eventArgs)
     {
-        if (PacDots.Count == 0 || Player.Lose || GameStartTime >= DateTime.Now)  return;
+        PrivateFontCollection collection = new PrivateFontCollection();
+        collection.AddFontFile(@"Fonts\ARCADECLASSIC.TTF");
+        var fontFamily = new FontFamily("ArcadeClassic", collection);
+        var font = new Font(fontFamily, 32, FontStyle.Regular, GraphicsUnit.Pixel);
+        
+        if (PacDots.Count == 0)
+        {
+            Level++;
+            LoadLevel();
+        }
+        if (Player.Lose || GameStartTime >= DateTime.Now)  return;
 
         if (PacDots.Count == ElroyModeCounter)
         {
@@ -121,10 +153,19 @@ public sealed class World : IWorld
             ghost.ReleaseGhost();
             
             if(ModeDurationIndex <= 7)
-                ghost.GhostModeTimer(7, 20, 7, 20, 5, 20, 5, 20);
-            
+                ghost.GhostModeTimer(GhostModeTime);
+
             if (ghost.WouldOverlap(Pacman.HitBox) && ghost.GhostMode == GhostMode.Frightened)
+            {
                 ghost.Die();
+                ghost.deathTimer = DateTime.Now + TimeSpan.FromSeconds(1.5);
+            }
+
+            if (DateTime.Now <= ghost.deathTimer)
+            {
+                eventArgs.Graphics.DrawString(ghost.eatenGhostPoints.ToString(), new Font(fontFamily, 40, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, ghost.currentXPosition,ghost.currentYPosition);
+            }
+
             if (Pacman.HitBox.WouldOverlap(ghost) && ghost.GhostMode is not (GhostMode.Frightened or GhostMode.Home))
                 Pacman.Die();
         }

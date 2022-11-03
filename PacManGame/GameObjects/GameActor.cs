@@ -4,7 +4,7 @@ public abstract class GameActor : GameObject
 {
     public ViewAngle viewangle;
     public ViewAngle nextViewangle;
-    protected int speed;
+    public int speed;
     private bool isDead;
     private int currFrame;
     protected readonly int xStartPosition;

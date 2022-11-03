@@ -2,9 +2,9 @@
 
 public class Pinky : Ghost
 {
-    public Pinky(IWorld world) : base(world,325, 375, 50, 50)
+    public Pinky(IWorld world, int speed) : base(world,325, 375, 50, 50)
     {
-        speed = 2;
+        this.speed = speed;
         currentSpeed = speed;
     }
 

@@ -4,9 +4,9 @@ public class Pacman : GameActor
 {
     //private HitBox HitBox;
     
-    public Pacman(IWorld world) : base(world,325, 615, 50, 50)
+    public Pacman(IWorld world, int speed) : base(world,325, 615, 50, 50)
     {
-        speed = 3;
+        this.speed = speed;
         //HitBox = new HitBox(2);
     }
 
