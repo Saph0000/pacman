@@ -1,6 +1,8 @@
 ﻿using System.Drawing.Text;
+using System.Text.Json;
 using PacManGame.GameObjects;
 using PacManGame.GameObjects.Ghosts;
+using PacManGame.Levels;
 
 namespace PacManGame;
 
@@ -14,11 +16,13 @@ public sealed class World : IWorld
         Player = new Player();
         ImageMap = Directory.GetFiles("Pictures", "*.png")
             .ToDictionary(Path.GetFileNameWithoutExtension, fileName => Image.FromFile(fileName));
-        Level = 1;
+        IsPaused = false;
         LoadLevel();
-        
+        if (!File.Exists("highscore.txt"))
+            File.WriteAllText("highscore.txt", "0");
     }
 
+    public Level Level { get; set; }
     public List<PacDot> PacDots { get; set; }
     public List<PowerPallet> PowerPallets { get; set; }
     public List<Wall> Walls { get; }
@@ -27,37 +31,46 @@ public sealed class World : IWorld
     public Pacman Pacman { get; set; }
     public Blinky Blinky { get; set; }
     public DateTime FrightenedStartTime { get; set; }
+    public TimeSpan FrightenedTime { get; set; }
     public DateTime GameStartTime { get; set; }
+    public DateTime PauseTime { get; set; }
+    public bool IsPaused { get; set; }
+    public DateTime PacmanDeathTime { get; set; }
     public List<Ghost> Ghosts { get; set; }
     public IDictionary<string, Image> ImageMap { get; }
-    public int NextModeChangeTime { get; set; }
+    public TimeSpan NextModeChangeTime { get; set; }
     public int ModeDurationIndex { get; set; }
     private int ElroyModeCounter { get; set; }
+    public int Highscore { get; set; }
     public GhostMode CurrentGhostMode { get; set; }
     public int eatenGhosts { get; set; }
-    public int Level { get; set; }
     public int[] GhostModeTime { get; set; }
+    public Control Control { get; set; }
 
     public void LoadLevel()
     {
+        Level[] levels = JsonSerializer.Deserialize<Level[]>(File.ReadAllText(@"Levels\Level.json"));
+        Level = levels.Where(level => level.Levels.Contains(Player.Level)).FirstOrDefault();
         PacDots = WorldFactory.CreatePacDots(this);
         PowerPallets = WorldFactory.CreatePowerPallets(this);
         Fruits = WorldFactory.CreateFruits(this);
-        Pacman = new Pacman(this, 4);
-        Blinky = new Blinky(this, 2);
+        Pacman = new Pacman(this, (float)(Level.PacmanSpeed / 100 * 3));
+       
+        Blinky = new Blinky(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed);
         Ghosts = new List<Ghost>
         {
             Blinky,
-            new Inky(this, 2),
-            new Pinky(this, 2),
-            new Clyde(this, 2)
+            new Inky(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed),
+            new Pinky(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed),
+            new Clyde(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed)
         };
-
-        GameStartTime = DateTime.Now + TimeSpan.FromSeconds(5);
+        Highscore = int.Parse(File.ReadAllText("highscore.txt"));
+        GameStartTime = DateTime.Now + TimeSpan.FromSeconds(3);
         ModeDurationIndex = 0;
-        NextModeChangeTime = 0;
-        ElroyModeCounter = 20;
-        GhostModeTime = new []{7,20,7,20,5,20,5,20};
+        NextModeChangeTime = TimeSpan.Zero;
+        ElroyModeCounter = Level.ElroyModeCounter;
+        FrightenedTime = TimeSpan.FromSeconds(Level.FrightenedTime);
+        GhostModeTime = Level.GhostModeTime;
     }
     
     public void Draw(PaintEventArgs eventArgs)
@@ -68,7 +81,7 @@ public sealed class World : IWorld
             wall.Draw(eventArgs);
         foreach (var powerPallet in PowerPallets)
             powerPallet.Draw(eventArgs);
-        if(PacDots.Count <= 170)
+        if(PacDots.Count <= 170 && !(PacmanDeathTime + TimeSpan.FromSeconds(5) > DateTime.Now))
             foreach (var fruit in Fruits)
                 fruit.Draw(eventArgs);
         
@@ -76,7 +89,7 @@ public sealed class World : IWorld
         PrivateFontCollection collection = new PrivateFontCollection();
         collection.AddFontFile(@"Fonts\ARCADECLASSIC.TTF");
         var fontFamily = new FontFamily("ArcadeClassic", collection);
-        var font = new Font(fontFamily, 32, FontStyle.Regular, GraphicsUnit.Pixel);
+        var font = new Font(fontFamily, 40, FontStyle.Regular, GraphicsUnit.Pixel);
 
         foreach (var ghost in Ghosts.Where(g => g.GhostMode != GhostMode.Off))
         {
@@ -90,56 +103,107 @@ public sealed class World : IWorld
             Pacman.Draw(eventArgs, 105, 850);
         if (Player.Life >= 3)
             Pacman.Draw(eventArgs, 160, 850);
-        
-        eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 10,10);
-        eventArgs.Graphics.DrawString(Level.ToString(), font, Brushes.White, 100,10);
-        //eventArgs.Graphics.DrawString(eatenGhosts.ToString(), font, Brushes.White, 100,10);
-        
+        foreach (var ghost in Ghosts)
+        {
+            eventArgs.Graphics.FillEllipse(Brushes.Aqua, ghost.targetXPosition, ghost.targetYPosition, 20,20);
+        }
+        eventArgs.Graphics.FillRectangle(Brushes.Aqua, 100,100,50,50);
+        eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 90,40);
+        eventArgs.Graphics.DrawString(Player.Level.ToString() + "UP", font, Brushes.White, 100,10);
+        eventArgs.Graphics.DrawString("High     Score", font, Brushes.White, 240,10);
+        eventArgs.Graphics.DrawString(Highscore.ToString(), font, Brushes.White, 290,40);
+        eventArgs.Graphics.DrawString(CurrentGhostMode.ToString(), font, Brushes.White, 400,40);
         if (Player.Lose)
         {
-            eventArgs.Graphics.DrawString("GameOver", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 205,310);
+            eventArgs.Graphics.DrawString("GameOver", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.Yellow, 205,310);
         }
 
         if (GameStartTime >= DateTime.Now)
         {
-            eventArgs.Graphics.DrawString("Player", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 240,310);
-            eventArgs.Graphics.DrawString("Ready!", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, 240,460);
+            eventArgs.Graphics.DrawString("Player", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.Yellow, 240,310);
+            eventArgs.Graphics.DrawString("Ready!", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.Yellow, 240,460);
+        }
+
+        if (PacmanDeathTime >= DateTime.Now && !Player.Lose)
+        {
+            eventArgs.Graphics.DrawString("Ready!", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.Yellow, 240,460);
         }
 
         foreach (var ghost in Ghosts)
         {
-            if (!ghost.IsReleased)
+            if (ghost.IsReleased) continue;
+            if (ghost.GetType() == typeof(Clyde))
             {
-                if (ghost.GetType() == typeof(Clyde))
-                {
-                    ghost.Draw(eventArgs, 275,375);
-                }
-                if (ghost.GetType() == typeof(Inky))
-                {
-                    ghost.Draw(eventArgs, 375,375);
-                }
-                if (ghost.GetType() == typeof(Pinky))
-                {
-                    ghost.Draw(eventArgs, 325,375);
-                }
-                
+                ghost.Draw(eventArgs, 275,375);
+            }
+            if (ghost.GetType() == typeof(Inky))
+            {
+                ghost.Draw(eventArgs, 375,375);
+            }
+            if (ghost.GetType() == typeof(Pinky))
+            {
+                ghost.Draw(eventArgs, 325,375);
             }
         }
     }
 
     public void Tick(PaintEventArgs eventArgs)
     {
-        PrivateFontCollection collection = new PrivateFontCollection();
+        var collection = new PrivateFontCollection();
         collection.AddFontFile(@"Fonts\ARCADECLASSIC.TTF");
         var fontFamily = new FontFamily("ArcadeClassic", collection);
         var font = new Font(fontFamily, 32, FontStyle.Regular, GraphicsUnit.Pixel);
         
+        if (IsPaused)
+        {
+            if (Control is Control.Esc or Control.Enter)
+            {
+                NextModeChangeTime += DateTime.Now - PauseTime;
+                FrightenedTime += DateTime.Now - PauseTime;
+                IsPaused = false;
+                if(Control == Control.Enter)
+                {
+                    Player = new Player();
+                    GameStartTime = DateTime.Now;
+                    LoadLevel();
+                }else
+                    Control = Control.Off;
+            }
+            else return;
+        }
+
+        if (Control == Control.Esc)
+        {
+            PauseTime = DateTime.Now;
+            IsPaused = true;
+            Control = Control.Off;
+        }
+
         if (PacDots.Count == 0)
         {
-            Level++;
+            Player.Level++;
             LoadLevel();
         }
-        if (Player.Lose || GameStartTime >= DateTime.Now)  return;
+
+        if (Player.Lose)
+        {
+            if (Player.Score > Highscore)
+            {
+                File.WriteAllText("highscore.txt", Player.Score.ToString());
+            }
+
+            if (Control == Control.Enter)
+            {
+                Player = new Player();
+                GameStartTime = DateTime.Now;
+                LoadLevel();
+            }else return;
+        }
+        if(GameStartTime >= DateTime.Now)  return;
+        if (PacmanDeathTime >= DateTime.Now)
+        {
+            return;
+        }
 
         if (PacDots.Count == ElroyModeCounter)
         {
@@ -201,6 +265,8 @@ public sealed class World : IWorld
 
             frame = 0;
         }
+
+        Control = Control.Off;
     }
 
   

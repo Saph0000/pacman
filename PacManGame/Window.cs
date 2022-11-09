@@ -56,5 +56,11 @@ public class Window : Form
             Keys.W or Keys.Up => ViewAngle.Up,
             _ => world.Pacman.nextViewangle
         };
+        world.Control = e.KeyCode switch
+        {
+            Keys.Escape => Control.Esc,
+            Keys.Enter => Control.Enter,
+            _ =>world.Control
+        };
     }
 }

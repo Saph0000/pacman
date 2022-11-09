@@ -3,8 +3,8 @@
 public abstract class GameObject
 {
     public IWorld World { get; set; }
-    public int XPosition { get; set; }
-    public int YPosition { get; set; }
+    public float XPosition { get; set; }
+    public float YPosition { get; set; }
     public int Width { get; init; }
     public int Height { get; init; }
     public string FruitImage { get; set; }

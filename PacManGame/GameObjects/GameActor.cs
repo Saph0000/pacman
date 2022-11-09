@@ -4,11 +4,11 @@ public abstract class GameActor : GameObject
 {
     public ViewAngle viewangle;
     public ViewAngle nextViewangle;
-    public int speed;
+    public float speed;
     private bool isDead;
     private int currFrame;
-    protected readonly int xStartPosition;
-    protected readonly int yStartPosition;
+    protected readonly float xStartPosition;
+    protected readonly float yStartPosition;
     protected int maxFrame = 0;
     
     protected GameActor(IWorld world, int xStartPosition, int yStartPosition, int width, int height)
@@ -59,7 +59,7 @@ public abstract class GameActor : GameObject
 
     private void CorrectPositionAfterLeftBorder()
     {
-        int CorrectPosition(int currentPosition, int lowerBound, int upperBound)
+        float CorrectPosition(float currentPosition, int lowerBound, int upperBound)
         {
             if (currentPosition > upperBound)
                 return lowerBound;
@@ -70,7 +70,7 @@ public abstract class GameActor : GameObject
     }
 
 
-    private int GetYPositionAfterMove(ViewAngle viewAngle) =>
+    private float GetYPositionAfterMove(ViewAngle viewAngle) =>
         viewAngle switch
         {
             ViewAngle.Up => YPosition - speed,
@@ -78,7 +78,7 @@ public abstract class GameActor : GameObject
             _ => YPosition
         };
 
-    private int GetXPositionAfterMove(ViewAngle viewAngle) =>
+    private float GetXPositionAfterMove(ViewAngle viewAngle) =>
         viewAngle switch
         {
             ViewAngle.Right => XPosition + speed,
@@ -208,7 +208,7 @@ public abstract class GameActor : GameObject
        
     }
     
-    public void Draw(PaintEventArgs e, int XPosition = 0,int YPosition = 0 )
+    public void Draw(PaintEventArgs e, float XPosition = 0,float YPosition = 0 )
     {
         if (XPosition == 0)
             XPosition = this.XPosition;

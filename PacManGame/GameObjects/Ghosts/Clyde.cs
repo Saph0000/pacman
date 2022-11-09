@@ -4,9 +4,10 @@ namespace PacManGame.GameObjects.Ghosts;
 
 public class Clyde : Ghost
 {
-    public Clyde(IWorld world, int speed) : base(world, 325, 375, 50, 50)
+    public Clyde(IWorld world, float speed, float frightenedSpeed) : base(world, 325, 375, 50, 50, frightenedSpeed)
     {
         this.speed = speed;
+        this.frightenedSpeed = frightenedSpeed;
         currentSpeed = speed;
     }
     

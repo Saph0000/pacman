@@ -6,19 +6,20 @@ namespace PacManGame.GameObjects.Ghosts;
 public abstract class Ghost : GameActor
 {
     private static readonly Random Random = new();
-    public int targetXPosition;
-    public int targetYPosition;
-    protected int currentSpeed;
-    public int currentXPosition;
-    public int currentYPosition;
+    public float targetXPosition;
+    public float targetYPosition;
+    protected float currentSpeed;
+    public float currentXPosition;
+    public float currentYPosition;
     public int eatenGhostPoints;
     public DateTime deathTimer;
+    public float frightenedSpeed;
     
     
     public GhostMode GhostMode { get; set; }
     public bool IsReleased { get; set; }
 
-    protected Ghost(IWorld world, int xStartPosition, int yStartPosition, int width, int height) : base(world, xStartPosition, yStartPosition, width, height)
+    protected Ghost(IWorld world, int xStartPosition, int yStartPosition, int width, int height, float frightenedSpeed) : base(world, xStartPosition, yStartPosition, width, height)
     {
         XPosition = xStartPosition;
         YPosition = yStartPosition;
@@ -26,7 +27,7 @@ public abstract class Ghost : GameActor
         IsReleased = false;
     }
 
-    protected void GhostDecision(int targetXPosition, int targetYPosition)
+    protected void GhostDecision(float targetXPosition, float targetYPosition)
     {
         var minDistance = double.PositiveInfinity;
         var minDistanceViewAngle = ViewAngle.None;
@@ -52,20 +53,20 @@ public abstract class Ghost : GameActor
 
     public void Frightened()
     {
-        if (DateTime.Now - World.FrightenedStartTime >= TimeSpan.FromSeconds(7))
+        if (DateTime.Now - World.FrightenedStartTime >= World.FrightenedTime)
         {
             GhostMode = GhostMode.Chase;
         }
 
 
-        maxFrame = DateTime.Now - World.FrightenedStartTime <= TimeSpan.FromSeconds(4) ? 2 : 0;
-        speed /= 2;
+        maxFrame = DateTime.Now - World.FrightenedStartTime <= World.FrightenedTime - TimeSpan.FromSeconds(3) ? 2 : 0;
+        speed *= frightenedSpeed / 100;
         var possibleDirections = CheckDirection(viewangle, GhostMode);
         viewangle = possibleDirections.Any() ? possibleDirections[Random.Next(0, possibleDirections.Count)] : ViewAngle.None;
         CouldTurn(viewangle, nextViewangle);
         if(!WouldHitWall(viewangle))
             Move();
-        speed *= 2;
+        speed = currentSpeed;
         
         
     }
@@ -94,7 +95,7 @@ public abstract class Ghost : GameActor
 
     private void Home()
     {
-        speed = 8;
+        speed = 6;
         targetXPosition = 325;
         targetYPosition = 375;
         GhostDecision(targetXPosition, targetYPosition);
@@ -155,8 +156,8 @@ public abstract class Ghost : GameActor
     }
     public virtual void GhostModeTimer(params int[] modeDurations)
     {
-        if (DateTime.Now - World.GameStartTime < TimeSpan.FromSeconds(World.NextModeChangeTime)) return;
-        World.NextModeChangeTime += modeDurations[World.ModeDurationIndex];
+        if (DateTime.Now - World.GameStartTime < World.NextModeChangeTime) return;
+        World.NextModeChangeTime += TimeSpan.FromSeconds(modeDurations[World.ModeDurationIndex]);
         switch (World.CurrentGhostMode)
         {
             case GhostMode.Chase:

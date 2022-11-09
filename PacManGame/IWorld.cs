@@ -13,13 +13,17 @@ public interface IWorld
     Pacman Pacman { get; set; }
     Player Player { get; set; }
     Blinky Blinky {  get; set; }
+    DateTime PacmanDeathTime { get; set; }
     DateTime FrightenedStartTime { get; set; }
+    TimeSpan FrightenedTime { get; set; }
     DateTime GameStartTime { get; set; }
+    DateTime PauseTime { get; set; }
+    public bool IsPaused  { get; set; }
     public IDictionary<string, Image> ImageMap { get; }
-    public int NextModeChangeTime { get; set; }
+    public TimeSpan NextModeChangeTime { get; set; }
     public int ModeDurationIndex { get; set; }
     public int eatenGhosts { get; set; }
-    public int Level { get; set; }
-
+    public int Highscore { get; set; }
+    public Control Control { get; set; }
     public GhostMode CurrentGhostMode { get; set; }
 }

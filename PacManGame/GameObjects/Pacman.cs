@@ -4,7 +4,7 @@ public class Pacman : GameActor
 {
     //private HitBox HitBox;
     
-    public Pacman(IWorld world, int speed) : base(world,325, 615, 50, 50)
+    public Pacman(IWorld world, float speed) : base(world,325, 615, 50, 50)
     {
         this.speed = speed;
         //HitBox = new HitBox(2);
@@ -21,12 +21,6 @@ public class Pacman : GameActor
             World.Player.Score += 10;
             break;
         }
-
-        if (!World.PacDots.Any())
-        {
-            //You cleared the level!!!
-        }
-
     }
 
     public void CollectFruits()
@@ -46,7 +40,7 @@ public class Pacman : GameActor
         {
             World.PowerPallets.Remove(powerPallet);
             World.FrightenedStartTime = DateTime.Now;
-            World.NextModeChangeTime += 7;
+            World.NextModeChangeTime += World.FrightenedTime;
             World.Player.Score += 50;
             foreach (var ghost in World.Ghosts.Where(ghost => ghost.GhostMode != GhostMode.Home && ghost.GhostMode != GhostMode.Off))
             {
@@ -68,6 +62,7 @@ public class Pacman : GameActor
 
     public override void Die()
     {
+        World.PacmanDeathTime = DateTime.Now + TimeSpan.FromSeconds(2);
         World.Player.Life--;
         if (World.Player.Life == 0)
             World.Player.Lose = true;

@@ -3,9 +3,10 @@
 public class Inky : Ghost
 {
    
-    public Inky(IWorld world, int speed) : base(world,325, 375, 50, 50)
+    public Inky(IWorld world, float speed, float frightenedSpeed) : base(world,325, 375, 50, 50, frightenedSpeed)
     {
         this.speed = speed;
+        this.frightenedSpeed = frightenedSpeed;
         currentSpeed = speed;
     }
 
@@ -14,8 +15,8 @@ public class Inky : Ghost
 
     protected override void Chase(Pacman pacman, Ghost blinky)
     { 
-        int pacmanXPosition;
-        int pacmanYPosition;
+        float pacmanXPosition;
+        float pacmanYPosition;
         
         switch (pacman.viewangle)
         {

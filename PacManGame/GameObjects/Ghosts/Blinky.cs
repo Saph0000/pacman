@@ -2,9 +2,10 @@
 
 public class Blinky : Ghost
 {
-    public Blinky(IWorld world, int speed) : base(world,325, 315, 50, 50)
+    public Blinky(IWorld world, float speed, float frightenedSpeed) : base(world,325, 315, 50, 50, frightenedSpeed)
     {
         this.speed = speed;
+        this.frightenedSpeed = frightenedSpeed;
         currentSpeed = speed;
     }
 
