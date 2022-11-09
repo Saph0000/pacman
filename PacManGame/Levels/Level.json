@@ -6,7 +6,7 @@
       "FrightenedSpeed": 50,
       "ElroyModeCounter": 20,
       "Fruits":["Cherry"],
-      "FrightenedTime": 7,
+      "FrightenedTime": 6,
       "GhostModeTime": [7,20,7,20,5,20,5,20]
     },
   {
@@ -15,14 +15,28 @@
     "GhostSpeed": 85,
     "FrightenedSpeed": 55,
     "ElroyModeCounter": 30,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 5,
     "GhostModeTime": [7,20,7,20,5,1033,0,20]
   },
   {
-    "Levels": [3,4],
+    "Levels": [3],
     "PacmanSpeed": 90,
     "GhostSpeed": 85,
     "FrightenedSpeed": 55,
     "ElroyModeCounter": 40,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 4,
+    "GhostModeTime": [7,20,7,20,5,1033,0,20]
+  },
+  {
+    "Levels": [4],
+    "PacmanSpeed": 90,
+    "GhostSpeed": 85,
+    "FrightenedSpeed": 55,
+    "ElroyModeCounter": 40,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 3,
     "GhostModeTime": [7,20,7,20,5,1033,0,20]
   },
   {
@@ -31,39 +45,99 @@
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
     "ElroyModeCounter": 40,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 2,
     "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
-    "Levels": [6,7,8],
+    "Levels": [6],
     "PacmanSpeed": 100,
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
     "ElroyModeCounter": 50,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 5,
     "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
-    "Levels": [9,10,11],
+    "Levels": [7,8],
+    "PacmanSpeed": 100,
+    "GhostSpeed": 95,
+    "FrightenedSpeed": 60,
+    "ElroyModeCounter": 50,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 2,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
+  },
+  {
+    "Levels": [9],
     "PacmanSpeed": 100,
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
     "ElroyModeCounter": 60,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 1,
     "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
-  "Levels": [12,13,14],
+    "Levels": [10],
     "PacmanSpeed": 100,
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
-  "ElroyModeCounter": 80,
-  "GhostModeTime": [5,20,5,20,5,1037,0,20]
+    "ElroyModeCounter": 60,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 5,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
-  "Levels": [15,16,17,18],
+    "Levels": [11],
+    "PacmanSpeed": 100,
+    "GhostSpeed": 95,
+    "FrightenedSpeed": 60,
+    "ElroyModeCounter": 60,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 2,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
+  },
+  {
+  "Levels": [12,13],
+    "PacmanSpeed": 100,
+    "GhostSpeed": 95,
+    "FrightenedSpeed": 60,
+    "ElroyModeCounter": 80,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 1,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
+  },
+  {
+    "Levels": [14],
+    "PacmanSpeed": 100,
+    "GhostSpeed": 95,
+    "FrightenedSpeed": 60,
+    "ElroyModeCounter": 80,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 3,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
+  },
+  {
+  "Levels": [15,16,18],
     "PacmanSpeed": 100,
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
   "ElroyModeCounter": 100,
-  "GhostModeTime": [5,20,5,20,5,1037,0,20]
+    "Fruits":["Cherry"],
+    "FrightenedTime": 1,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
+  },
+  {
+    "Levels": [17],
+    "PacmanSpeed": 100,
+    "GhostSpeed": 95,
+    "FrightenedSpeed": 60,
+    "ElroyModeCounter": 100,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 0,
+    "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
     "Levels": [19],
@@ -71,6 +145,8 @@
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
     "ElroyModeCounter": 120,
+    "Fruits":["Cherry"],
+    "FrightenedTime": 0,
     "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
@@ -79,6 +155,8 @@
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
     "ElroyModeCounter": 120,
+    "FrightenedTime": 0,
+    "Fruits":["Cherry"],
     "GhostModeTime": [5,20,5,20,5,1037,0,20]
   },
   {
@@ -87,6 +165,8 @@
     "GhostSpeed": 95,
     "FrightenedSpeed": 60,
     "ElroyModeCounter": 120,
+    "FrightenedTime": 0,
+    "Fruits":["Cherry"],
     "GhostModeTime": [5,20,5,20,5,1037,0,20]
   }
 ]

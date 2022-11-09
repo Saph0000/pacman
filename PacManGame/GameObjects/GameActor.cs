@@ -7,14 +7,10 @@ public abstract class GameActor : GameObject
     public float speed;
     private bool isDead;
     private int currFrame;
-    protected readonly float xStartPosition;
-    protected readonly float yStartPosition;
-    protected int maxFrame = 0;
+    protected int maxFrame;
     
     protected GameActor(IWorld world, int xStartPosition, int yStartPosition, int width, int height)
     {
-        this.xStartPosition = xStartPosition;
-        this.yStartPosition = yStartPosition;
         Width = width;
         Height = height;
         World = world;
@@ -119,7 +115,7 @@ public abstract class GameActor : GameObject
     private bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall) =>
         WouldHitWall(viewAngle, out hitWall, 0, 0);
 
-    private bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall, int xPlus, int yPlus)
+    private bool WouldHitWall(ViewAngle viewAngle, out Wall? hitWall, float xPlus, float yPlus)
     {
         hitWall = null;
         foreach (var wall in World.Walls)
@@ -136,7 +132,7 @@ public abstract class GameActor : GameObject
     protected List<ViewAngle> CheckDirection(ViewAngle currentViewAngle, GhostMode GhostMode)
     {
         var possibleDirections = new List<ViewAngle>();
-        if (!WouldHitWall(ViewAngle.Up) && currentViewAngle != ViewAngle.Down)
+        if (!WouldHitWall(ViewAngle.Up) && currentViewAngle != ViewAngle.Down && !(XPosition == 285 && YPosition == 315 || XPosition == 360 && YPosition == 315 || XPosition == 285 && YPosition == 615 || XPosition == 360 && YPosition == 615))
             possibleDirections.Add(ViewAngle.Up);
         if(!WouldHitWall(ViewAngle.Down) && currentViewAngle != ViewAngle.Up && !(XPosition == 325 && YPosition == 315 &&  GhostMode != GhostMode.Home))
             possibleDirections.Add(ViewAngle.Down);
@@ -149,8 +145,8 @@ public abstract class GameActor : GameObject
 
     public void SetToNextTurn()
     {
-        var yPlus = 0;
-        var xPlus = 0;
+        float yPlus = 0;
+        float xPlus = 0;
         switch (viewangle)
         {
             case ViewAngle.Right:
@@ -162,7 +158,8 @@ public abstract class GameActor : GameObject
                         XPosition += xPlus;
                         break;
                     }
-                    xPlus++;
+                    //xPlus++;
+                    xPlus += 0.05f;
                 }
                 break;
             case ViewAngle.Left:
@@ -174,7 +171,8 @@ public abstract class GameActor : GameObject
                         XPosition += xPlus;
                         break;
                     }
-                    xPlus--;
+                    //xPlus--;
+                    xPlus -= 0.05f;
                 }
                 break;
             case ViewAngle.Up:
@@ -186,7 +184,8 @@ public abstract class GameActor : GameObject
                         YPosition += yPlus;
                         break;
                     }
-                    yPlus--;
+                    //yPlus--;
+                    yPlus -= 0.05f;
                 }
                 break;
             case ViewAngle.Down:
@@ -198,7 +197,8 @@ public abstract class GameActor : GameObject
                         YPosition += yPlus;
                         break;
                     }
-                    yPlus++;
+                    //yPlus++;
+                    yPlus += 0.05f;
                 }
                 break;
 

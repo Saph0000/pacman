@@ -60,6 +60,7 @@ public class Window : Form
         {
             Keys.Escape => Control.Esc,
             Keys.Enter => Control.Enter,
+            Keys.P => Control.PowerUp,
             _ =>world.Control
         };
     }

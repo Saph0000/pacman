@@ -55,9 +55,7 @@ public class Pacman : GameActor
 
     protected override string[] GetImageNames()
     {
-        if (viewangle == ViewAngle.None)
-            return new[] { "pacman_None", "pacman_None", "pacman_None" };
-        return new[] { "pacman_None", "pacman_" + viewangle + " (1)", "pacman_" + viewangle + " (2)" };
+        return viewangle == ViewAngle.None ? new[] { "pacman_None", "pacman_None", "pacman_None" } : new[] { "pacman_None", "pacman_" + viewangle + " (1)", "pacman_" + viewangle + " (2)" };
     }
 
     public override void Die()

@@ -9,7 +9,7 @@ public abstract class GameObject
     public int Height { get; init; }
     public string FruitImage { get; set; }
     
-    protected bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, int xPlus = 0, int yPlus = 0) =>
+    protected bool WouldHitObject(GameObject gameObject, ViewAngle viewAngle, float xPlus = 0, float yPlus = 0) =>
         viewAngle switch
         {
             ViewAngle.Left => WouldOverlap(gameObject, -1, 0, xPlus, yPlus),
@@ -19,7 +19,7 @@ public abstract class GameObject
             _ => true
         };
 
-    public bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, int xPlus = 0, int yPlus = 0)
+    public bool WouldOverlap(GameObject gameObject, int xDelta = 0, int yDelta = 0, float xPlus = 0, float yPlus = 0)
     {
         var leftX = Math.Max(XPosition + xPlus + xDelta, gameObject.XPosition);
         var rightX = Math.Min(XPosition + xPlus + xDelta + Width, gameObject.XPosition + gameObject.Width);

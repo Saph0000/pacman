@@ -22,9 +22,10 @@ public sealed class World : IWorld
             File.WriteAllText("highscore.txt", "0");
     }
 
-    public Level Level { get; set; }
+    public Level? Level { get; set; }
     public List<PacDot> PacDots { get; set; }
     public List<PowerPallet> PowerPallets { get; set; }
+    public bool IsPoweredUp { get; set; }
     public List<Wall> Walls { get; }
     public List<Fruit> Fruits { get; set; }
     public Player Player { get; set; }
@@ -55,18 +56,19 @@ public sealed class World : IWorld
         PowerPallets = WorldFactory.CreatePowerPallets(this);
         Fruits = WorldFactory.CreateFruits(this);
         Pacman = new Pacman(this, (float)(Level.PacmanSpeed / 100 * 3));
-       
+        IsPoweredUp = false;
         Blinky = new Blinky(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed);
         Ghosts = new List<Ghost>
         {
             Blinky,
-            new Inky(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed),
-            new Pinky(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed),
-            new Clyde(this, (float)(Level.GhostSpeed / 100 * 3), Level.FrightenedSpeed)
+            new Inky(this, Level.GhostSpeed / 100 * 3, Level.FrightenedSpeed),
+            new Pinky(this, Level.GhostSpeed / 100 * 3, Level.FrightenedSpeed),
+            new Clyde(this, Level.GhostSpeed / 100 * 3, Level.FrightenedSpeed)
         };
         Highscore = int.Parse(File.ReadAllText("highscore.txt"));
         GameStartTime = DateTime.Now + TimeSpan.FromSeconds(3);
         ModeDurationIndex = 0;
+        CurrentGhostMode = GhostMode.Chase;
         NextModeChangeTime = TimeSpan.Zero;
         ElroyModeCounter = Level.ElroyModeCounter;
         FrightenedTime = TimeSpan.FromSeconds(Level.FrightenedTime);
@@ -103,16 +105,10 @@ public sealed class World : IWorld
             Pacman.Draw(eventArgs, 105, 850);
         if (Player.Life >= 3)
             Pacman.Draw(eventArgs, 160, 850);
-        foreach (var ghost in Ghosts)
-        {
-            eventArgs.Graphics.FillEllipse(Brushes.Aqua, ghost.targetXPosition, ghost.targetYPosition, 20,20);
-        }
-        eventArgs.Graphics.FillRectangle(Brushes.Aqua, 100,100,50,50);
         eventArgs.Graphics.DrawString(Player.Score.ToString(), font, Brushes.White, 90,40);
         eventArgs.Graphics.DrawString(Player.Level.ToString() + "UP", font, Brushes.White, 100,10);
         eventArgs.Graphics.DrawString("High     Score", font, Brushes.White, 240,10);
         eventArgs.Graphics.DrawString(Highscore.ToString(), font, Brushes.White, 290,40);
-        eventArgs.Graphics.DrawString(CurrentGhostMode.ToString(), font, Brushes.White, 400,40);
         if (Player.Lose)
         {
             eventArgs.Graphics.DrawString("GameOver", new Font(fontFamily, 60, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.Yellow, 205,310);
@@ -179,8 +175,26 @@ public sealed class World : IWorld
             Control = Control.Off;
         }
 
+        if (!IsPoweredUp && Control == Control.PowerUp)
+        {
+            Pacman.speed *= 2;
+            Pacman.HitBox.padding = 50;
+            IsPoweredUp = true;
+            Control = Control.Off;
+        }
+
+        if (IsPoweredUp && Control == Control.PowerUp)
+        {
+            IsPoweredUp = false;
+            Pacman.speed /= 2;
+        }
+
         if (PacDots.Count == 0)
         {
+            foreach (var wall in Walls)
+            {
+                wall.Draw(eventArgs);
+            }
             Player.Level++;
             LoadLevel();
         }
@@ -230,7 +244,7 @@ public sealed class World : IWorld
                 eventArgs.Graphics.DrawString(ghost.eatenGhostPoints.ToString(), new Font(fontFamily, 40, FontStyle.Regular, GraphicsUnit.Pixel), Brushes.White, ghost.currentXPosition,ghost.currentYPosition);
             }
 
-            if (Pacman.HitBox.WouldOverlap(ghost) && ghost.GhostMode is not (GhostMode.Frightened or GhostMode.Home))
+            if (Pacman.HitBox.WouldOverlap(ghost) && ghost.GhostMode is not (GhostMode.Frightened or GhostMode.Home) && !IsPoweredUp)
                 Pacman.Die();
         }
 
